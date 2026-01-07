@@ -17,7 +17,7 @@ namespace THITN.DAO
         public static List<Coso> GetDanhSachCoSo()
         {
             List<Coso> coSoList = new List<Coso>(); // 1. Tạo List
-            string connString = ConfigurationManager.ConnectionStrings["THITN.Properties.Settings.Server0ConnectionString"].ConnectionString;
+            string connString = ConfigurationManager.ConnectionStrings["db.cs0"].ConnectionString;
 
             using (SqlConnection connection = new SqlConnection(connString))
             {
@@ -42,10 +42,8 @@ namespace THITN.DAO
                     }
                     reader.Close();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show("Lỗi không thể tải danh sách cơ sở từ máy chủ tra cứu.\n" + ex.Message,
-                                    "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null; // Trả về null nếu có lỗi
                 }
             }

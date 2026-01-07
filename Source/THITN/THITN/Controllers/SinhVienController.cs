@@ -11,16 +11,15 @@ namespace THITN.Controllers
     /// <summary>
     /// Controller xử lý tất cả logic nghiệp vụ cho Form Đăng nhập
     /// </summary>
-    public class LoginController
+    public class SinhVienController
     {
         /// <summary>
         /// Lấy danh sách cơ sở để View hiển thị lên ComboBox
         /// </summary>
         /// <returns>Danh sách các đối tượng CoSo</returns>
-        public List<Coso> LoadCoSoList()
+        public SinhVien GetSinhVien(string masv, string pass)
         {
-            // Controller gọi DAO
-            return CosoDAO.GetDanhSachCoSo();
+            return SinhvienDAO.GetThongTinSinhVien(masv, pass);
         }
 
         /// <summary>
@@ -32,16 +31,25 @@ namespace THITN.Controllers
             {
                 // 1. LÀ SINH VIÊN: Xác thực bằng Bảng SinhVien
                 // Sinh viên phải kết nối bằng tài khoản tra cứu (Server 3)
-                SystemInfo.DB.LoginUser = System.Configuration.ConfigurationManager.AppSettings["sv.user"].ToString();
-                SystemInfo.DB.LoginPass = System.Configuration.ConfigurationManager.AppSettings["sv.pass"].ToString();
+                SystemInfo.DB.LoginUser = System.Configuration.ConfigurationManager.ConnectionStrings["sv.user"].ConnectionString;
+                SystemInfo.DB.LoginPass = System.Configuration.ConfigurationManager.ConnectionStrings["sv.pass"].ConnectionString;
                 var sinhvienController = new SinhVienController();
-                var objSinhVien = sinhvienController.GetSinhVien(login, password);
 
-                if (objSinhVien!=null)
+                bool svHopLe = true;
+
+
+                if (svHopLe)
                 {
-                    SystemInfo.IsLoggedIn = true;
-                    SystemInfo.CurrentSinhVien = objSinhVien;
-                    SystemInfo.Role = DatabaseRole.SINHVIEN;
+                    // Xác thực thành công.
+                    // Bây giờ, kết nối CSDL bằng tài khoản DÙNG CHUNG của SinhVien
+                    // (Lấy từ 1 file config hoặc hard-code)
+                    string svLogin = "LOGIN_SV_CHUNG";
+                    string svPass = "abc@123"; // Mật khẩu của tài khoản SQL chung
+
+                    if (Database.Connect(serverName, svLogin, svPass))
+                    {
+
+                    }
                 }
             }
             else

@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using THITN.DAO; // Thư viện này không còn cần ở đây nữa
 using THITN.Controllers; // Sẽ dùng khi bạn tạo Controller
 using THITN.Core; // Sẽ dùng để truy cập Session
-using THITN.Models; // Thêm thư viện Models
+using THITN.Models;
+using THITN.Helper; // Thêm thư viện Models
 
 namespace THITN.Views
 {
@@ -18,7 +19,8 @@ namespace THITN.Views
     {
         // 1. Tạo một thể hiện (instance) của LoginController
         private LoginController controller;
-
+        public event EventHandler LoginSucceeded;
+        public event EventHandler ExitRequested;
         public frmLogin()
         {
             InitializeComponent();
@@ -28,6 +30,7 @@ namespace THITN.Views
 
         private void frmLogin_Load(object sender, EventArgs e)
         {
+            CenterPanel();
             // --- Tải dữ liệu cho ComboBox Cơ sở ---
 
             // 3. View gọi Controller để lấy dữ liệu
@@ -45,14 +48,13 @@ namespace THITN.Views
             cmbCoSo.DisplayMember = "TENCS";     // Hiển thị tên (ví dụ: "Cơ sở 1")
             cmbCoSo.ValueMember = "SERVER_NAME"; // Giá trị ẩn (ví dụ: "MAYCHU_CS1")
 
-            cmbCoSo.SelectedIndex = 0; // Chọn CS1 làm mặc định
-            rbGiangVien.Checked = true; // Chọn vai trò Giảng viên làm mặc định
+            cmbCoSo.SelectedIndex = 0;
+            //rbGiangVien.Checked = true;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
-            // Đóng toàn bộ ứng dụng
-            Application.Exit();
+            this.Close();   
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -81,33 +83,38 @@ namespace THITN.Views
                 return;
             }
 
-            // --- 3. GỌI CONTROLLER XỬ LÝ ---
-            // Bỏ comment đoạn code này
+            SystemInfo.DB.ServerName = serverName;
 
-            // LoginController controller = new LoginController(); // Đã khởi tạo ở constructor
-            bool loginSuccess = controller.HandleLogin(serverName, login, password, isSinhVien);
 
-            if (loginSuccess)
+            controller.HandleLogin(serverName, login, password, isSinhVien);
+
+            if (SystemInfo.IsLoggedIn)
             {
-                // Đăng nhập thành công, mở Form Main
-                // TODO: Bạn cần tạo frmMain
-                // frmMain f = new frmMain();
-                // f.Show();
-                MessageBox.Show("Đăng nhập thành công! (Form Main chưa được tạo)");
-                // this.Hide(); // Ẩn form đăng nhập
+                LoginSucceeded?.Invoke(this, EventArgs.Empty);
+                this.Close();   
             }
             else
             {
-                // Controller đã xử lý và thông báo lỗi
                 MessageBox.Show("Đăng nhập thất bại. Vui lòng kiểm tra lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
-            /*
-            // --- XÓA DÒNG NÀY KHI CÓ CONTROLLER ---
-            MessageBox.Show("Đang chờ xử lý logic đăng nhập...\n" +
-                            $"ServerName: {serverName}\nLogin: {login}\nSinhVien: {isSinhVien}");
-            // --- HẾT PHẦN XÓA ---
-            */
+        private void frmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
+
+        private void frmLogin_Resize(object sender, EventArgs e)
+        {
+            CenterPanel();
+        }
+        private void CenterPanel()
+        {
+            // Center trong client area của form
+            int x = (this.ClientSize.Width - panel1.Width) / 2;
+            int y = (this.ClientSize.Height - panel1.Height) / 2;
+            panel1.Left = Math.Max(0, x);
+            panel1.Top = Math.Max(0, y);
         }
     }
 }
