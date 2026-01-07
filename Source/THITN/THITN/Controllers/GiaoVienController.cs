@@ -5,25 +5,26 @@ using THITN.Core; // Để sử dụng Core.Database và Core.Session
 using System.Data.SqlClient;
 using System.Data;
 using THITN.Helper;
-using System;
 
 namespace THITN.Controllers
 {
     /// <summary>
     /// Controller xử lý tất cả logic nghiệp vụ cho Form Đăng nhập
     /// </summary>
-    public class LoginController
+    public class GiaoVienController
     {
         /// <summary>
         /// Lấy danh sách cơ sở để View hiển thị lên ComboBox
         /// </summary>
         /// <returns>Danh sách các đối tượng CoSo</returns>
-        public List<Coso> LoadCoSoList()
+        public GiaoVien GetGiaoVienFromLoginUser(string strLoginUser)
         {
-            // Controller gọi DAO
-            return CosoDAO.GetDanhSachCoSo();
+            return GiaoVienDAO.GetThongTinGiaoVienTuLoginUser(strLoginUser);
         }
-
+        public GiaoVien GetGiaoVienFromMaGV(string strMaGV)
+        {
+            return GiaoVienDAO.GetThongTinGiaoVienTuMaGV(strMaGV);
+        }
         /// <summary>
         /// Xử lý logic đăng nhập chính
         /// </summary>
@@ -33,16 +34,25 @@ namespace THITN.Controllers
             {
                 // 1. LÀ SINH VIÊN: Xác thực bằng Bảng SinhVien
                 // Sinh viên phải kết nối bằng tài khoản tra cứu (Server 3)
-                SystemInfo.DB.LoginUser = System.Configuration.ConfigurationManager.AppSettings["sv.user"].ToString();
-                SystemInfo.DB.LoginPass = System.Configuration.ConfigurationManager.AppSettings["sv.pass"].ToString();
+                SystemInfo.DB.LoginUser = System.Configuration.ConfigurationManager.ConnectionStrings["sv.user"].ConnectionString;
+                SystemInfo.DB.LoginPass = System.Configuration.ConfigurationManager.ConnectionStrings["sv.pass"].ConnectionString;
                 var sinhvienController = new SinhVienController();
-                var objSinhVien = sinhvienController.GetSinhVien(login, password);
 
-                if (objSinhVien!=null)
+                bool svHopLe = true;
+
+
+                if (svHopLe)
                 {
-                    SystemInfo.IsLoggedIn = true;
-                    SystemInfo.CurrentSinhVien = objSinhVien;
-                    SystemInfo.Role = DatabaseRole.SINHVIEN;
+                    // Xác thực thành công.
+                    // Bây giờ, kết nối CSDL bằng tài khoản DÙNG CHUNG của SinhVien
+                    // (Lấy từ 1 file config hoặc hard-code)
+                    string svLogin = "LOGIN_SV_CHUNG";
+                    string svPass = "abc@123"; // Mật khẩu của tài khoản SQL chung
+
+                    if (Database.Connect(serverName, svLogin, svPass))
+                    {
+
+                    }
                 }
             }
             else
@@ -54,17 +64,20 @@ namespace THITN.Controllers
                 if (Database.Connect(serverName, login, password))
                 {
                     // Đăng nhập thành công, lấy thông tin Role và HoTen
-                    var objGiaoVienController = new GiaoVienController();
-                    var objGiaoVien = objGiaoVienController.GetGiaoVienFromLoginUser(login);
-                    if (objGiaoVien != null)
+                    SqlDataReader reader = Database.ExecuteReader("SP_LayThongTinGiaoVienTuLogin");
+                    if (reader.Read())
                     {
-                        SystemInfo.IsLoggedIn = true;
-                        SystemInfo.CurrentGiaoVien = objGiaoVien;
-                        SystemInfo.Role = (DatabaseRole)Enum.Parse(typeof(DatabaseRole), objGiaoVien.Role, true);
+                        Session.Username = login;
+                        Session.FullName = reader["HOTEN"].ToString();
+                        Session.UserRole = reader["ROLE"].ToString();
+                        reader.Close();
+                        return true;
                     }
+                    reader.Close();
                 }
             }
 
+            // Nếu mọi thứ thất bại
             Database.Disconnect();
             return false;
         }

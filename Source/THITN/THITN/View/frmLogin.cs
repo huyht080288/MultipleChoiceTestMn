@@ -49,7 +49,7 @@ namespace THITN.Views
             cmbCoSo.ValueMember = "SERVER_NAME"; // Giá trị ẩn (ví dụ: "MAYCHU_CS1")
 
             cmbCoSo.SelectedIndex = 0;
-            //rbGiangVien.Checked = true;
+            rbGiangVien.Checked = true;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)

@@ -43,12 +43,12 @@ namespace THITN.Core
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Lỗi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Lỗi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false; // Kết nối thất bại
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi không xác định khi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Lỗi không xác định khi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false; // Kết nối thất bại
             }
         }

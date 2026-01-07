@@ -25,6 +25,7 @@ namespace THITN.Helper
         public static bool IsLoggedIn = false;
         public static DatabaseRole Role = DatabaseRole.None;
         public static SinhVien CurrentSinhVien = null;
+        public static GiaoVien CurrentGiaoVien = null;
         public static class DB
         {
             public static string LoginUser = "sv";

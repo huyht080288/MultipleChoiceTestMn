@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\GiaoVienController.cs" />
     <Compile Include="Controllers\SinhVienController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Core\Database.cs" />
@@ -55,13 +56,14 @@
     <Compile Include="DAO\KhoaDAO.cs" />
     <Compile Include="DAO\LopDAO.cs" />
     <Compile Include="DAO\MonhocDAO.cs" />
+    <Compile Include="DAO\GiaoVienDAO.cs" />
     <Compile Include="DAO\SinhvienDAO.cs" />
     <Compile Include="Helper\Utils.cs" />
     <Compile Include="Helper\SystemInfo.cs" />
     <Compile Include="Models\Bangdiem.cs" />
     <Compile Include="Models\Bode.cs" />
     <Compile Include="Models\Coso.cs" />
-    <Compile Include="Models\Giaovien.cs" />
+    <Compile Include="Models\GiaoVien.cs" />
     <Compile Include="Models\Giaovien_Dangky.cs" />
     <Compile Include="Models\Khoa.cs" />
     <Compile Include="Models\Lop.cs" />
