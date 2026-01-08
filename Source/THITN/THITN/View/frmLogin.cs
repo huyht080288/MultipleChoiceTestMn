@@ -48,7 +48,7 @@ namespace THITN.Views
             cmbCoSo.DisplayMember = "TENCS";     // Hiển thị tên (ví dụ: "Cơ sở 1")
             cmbCoSo.ValueMember = "SERVER_NAME"; // Giá trị ẩn (ví dụ: "MAYCHU_CS1")
 
-            cmbCoSo.SelectedIndex = 0;
+            cmbCoSo.SelectedIndex = 1;
             rbGiangVien.Checked = true;
         }
 

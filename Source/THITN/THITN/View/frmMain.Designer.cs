@@ -33,23 +33,23 @@
             this.mnLogin = new System.Windows.Forms.ToolStripMenuItem();
             this.mnLogout = new System.Windows.Forms.ToolStripMenuItem();
             this.mnExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lblFooter = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mnManagement = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNhapMonHoc = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNhapKhoaLop = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNhapSinhVien = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNhapGiaoVien = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNhapDe = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnChuanBiThi = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnThi = new System.Windows.Forms.ToolStripMenuItem();
+            this.báoCáoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnKetQua = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnBangDiem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnDanhSachDangKy = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnManagement = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnThi = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnChuanBiThi = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnNhapDe = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnNhapSinhVien = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnNhapKhoaLop = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnNhapMonHoc = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnNhapGiaoVien = new System.Windows.Forms.ToolStripMenuItem();
-            this.báoCáoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnBangDiem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnDanhSachDangKy = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnKetQua = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lblFooter = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -80,39 +80,107 @@
             // mnLogin
             // 
             this.mnLogin.Name = "mnLogin";
-            this.mnLogin.Size = new System.Drawing.Size(180, 22);
+            this.mnLogin.Size = new System.Drawing.Size(132, 22);
             this.mnLogin.Text = "Đăng nhập";
             this.mnLogin.Click += new System.EventHandler(this.mnLogin_Click);
             // 
             // mnLogout
             // 
             this.mnLogout.Name = "mnLogout";
-            this.mnLogout.Size = new System.Drawing.Size(180, 22);
+            this.mnLogout.Size = new System.Drawing.Size(132, 22);
             this.mnLogout.Text = "Đăng xuất";
             this.mnLogout.Click += new System.EventHandler(this.mnLogout_Click);
             // 
             // mnExit
             // 
             this.mnExit.Name = "mnExit";
-            this.mnExit.Size = new System.Drawing.Size(180, 22);
+            this.mnExit.Size = new System.Drawing.Size(132, 22);
             this.mnExit.Text = "Thoát";
             this.mnExit.Click += new System.EventHandler(this.mnExit_Click);
             // 
-            // statusStrip1
+            // mnManagement
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblFooter});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 592);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1212, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.mnManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnNhapMonHoc,
+            this.btnNhapKhoaLop,
+            this.btnNhapSinhVien,
+            this.btnNhapGiaoVien,
+            this.btnNhapDe,
+            this.btnChuanBiThi,
+            this.btnThi});
+            this.mnManagement.Name = "mnManagement";
+            this.mnManagement.Size = new System.Drawing.Size(79, 20);
+            this.mnManagement.Text = "Chức Năng";
             // 
-            // lblFooter
+            // btnNhapMonHoc
             // 
-            this.lblFooter.Name = "lblFooter";
-            this.lblFooter.Size = new System.Drawing.Size(118, 17);
-            this.lblFooter.Text = "toolStripStatusLabel1";
+            this.btnNhapMonHoc.Name = "btnNhapMonHoc";
+            this.btnNhapMonHoc.Size = new System.Drawing.Size(180, 22);
+            this.btnNhapMonHoc.Text = "Nhập môn học";
+            // 
+            // btnNhapKhoaLop
+            // 
+            this.btnNhapKhoaLop.Name = "btnNhapKhoaLop";
+            this.btnNhapKhoaLop.Size = new System.Drawing.Size(180, 22);
+            this.btnNhapKhoaLop.Text = "Nhập khoa-lớp";
+            // 
+            // btnNhapSinhVien
+            // 
+            this.btnNhapSinhVien.Name = "btnNhapSinhVien";
+            this.btnNhapSinhVien.Size = new System.Drawing.Size(180, 22);
+            this.btnNhapSinhVien.Text = "Nhập sinh viên";
+            // 
+            // btnNhapGiaoVien
+            // 
+            this.btnNhapGiaoVien.Name = "btnNhapGiaoVien";
+            this.btnNhapGiaoVien.Size = new System.Drawing.Size(180, 22);
+            this.btnNhapGiaoVien.Text = "Nhập giáo viên";
+            // 
+            // btnNhapDe
+            // 
+            this.btnNhapDe.Name = "btnNhapDe";
+            this.btnNhapDe.Size = new System.Drawing.Size(180, 22);
+            this.btnNhapDe.Text = "Nhập đề";
+            // 
+            // btnChuanBiThi
+            // 
+            this.btnChuanBiThi.Name = "btnChuanBiThi";
+            this.btnChuanBiThi.Size = new System.Drawing.Size(180, 22);
+            this.btnChuanBiThi.Text = "Chuẩn bị thi";
+            // 
+            // btnThi
+            // 
+            this.btnThi.Name = "btnThi";
+            this.btnThi.Size = new System.Drawing.Size(180, 22);
+            this.btnThi.Text = "Thi";
+            // 
+            // báoCáoToolStripMenuItem
+            // 
+            this.báoCáoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnKetQua,
+            this.btnBangDiem,
+            this.btnDanhSachDangKy});
+            this.báoCáoToolStripMenuItem.Name = "báoCáoToolStripMenuItem";
+            this.báoCáoToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.báoCáoToolStripMenuItem.Text = "Báo Cáo";
+            // 
+            // btnKetQua
+            // 
+            this.btnKetQua.Name = "btnKetQua";
+            this.btnKetQua.Size = new System.Drawing.Size(182, 22);
+            this.btnKetQua.Text = "Kết quả thi";
+            // 
+            // btnBangDiem
+            // 
+            this.btnBangDiem.Name = "btnBangDiem";
+            this.btnBangDiem.Size = new System.Drawing.Size(182, 22);
+            this.btnBangDiem.Text = "Bảng điểm môn học";
+            // 
+            // btnDanhSachDangKy
+            // 
+            this.btnDanhSachDangKy.Name = "btnDanhSachDangKy";
+            this.btnDanhSachDangKy.Size = new System.Drawing.Size(182, 22);
+            this.btnDanhSachDangKy.Text = "Danh sách đăng ký";
             // 
             // infoToolStripMenuItem
             // 
@@ -135,89 +203,21 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.aboutToolStripMenuItem.Text = "Thông tin ứng dụng";
             // 
-            // mnManagement
+            // statusStrip1
             // 
-            this.mnManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnNhapMonHoc,
-            this.btnNhapKhoaLop,
-            this.btnNhapSinhVien,
-            this.btnNhapGiaoVien,
-            this.btnNhapDe,
-            this.btnChuanBiThi,
-            this.btnThi});
-            this.mnManagement.Name = "mnManagement";
-            this.mnManagement.Size = new System.Drawing.Size(79, 20);
-            this.mnManagement.Text = "Chức Năng";
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblFooter});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 592);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1212, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // btnThi
+            // lblFooter
             // 
-            this.btnThi.Name = "btnThi";
-            this.btnThi.Size = new System.Drawing.Size(180, 22);
-            this.btnThi.Text = "Thi";
-            // 
-            // btnChuanBiThi
-            // 
-            this.btnChuanBiThi.Name = "btnChuanBiThi";
-            this.btnChuanBiThi.Size = new System.Drawing.Size(180, 22);
-            this.btnChuanBiThi.Text = "Chuẩn bị thi";
-            // 
-            // btnNhapDe
-            // 
-            this.btnNhapDe.Name = "btnNhapDe";
-            this.btnNhapDe.Size = new System.Drawing.Size(180, 22);
-            this.btnNhapDe.Text = "Nhập đề";
-            // 
-            // btnNhapSinhVien
-            // 
-            this.btnNhapSinhVien.Name = "btnNhapSinhVien";
-            this.btnNhapSinhVien.Size = new System.Drawing.Size(180, 22);
-            this.btnNhapSinhVien.Text = "Nhập sinh viên";
-            // 
-            // btnNhapKhoaLop
-            // 
-            this.btnNhapKhoaLop.Name = "btnNhapKhoaLop";
-            this.btnNhapKhoaLop.Size = new System.Drawing.Size(180, 22);
-            this.btnNhapKhoaLop.Text = "Nhập khoa-lớp";
-            // 
-            // btnNhapMonHoc
-            // 
-            this.btnNhapMonHoc.Name = "btnNhapMonHoc";
-            this.btnNhapMonHoc.Size = new System.Drawing.Size(180, 22);
-            this.btnNhapMonHoc.Text = "Nhập môn học";
-            // 
-            // btnNhapGiaoVien
-            // 
-            this.btnNhapGiaoVien.Name = "btnNhapGiaoVien";
-            this.btnNhapGiaoVien.Size = new System.Drawing.Size(180, 22);
-            this.btnNhapGiaoVien.Text = "Nhập giáo viên";
-            // 
-            // báoCáoToolStripMenuItem
-            // 
-            this.báoCáoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnKetQua,
-            this.btnBangDiem,
-            this.btnDanhSachDangKy});
-            this.báoCáoToolStripMenuItem.Name = "báoCáoToolStripMenuItem";
-            this.báoCáoToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.báoCáoToolStripMenuItem.Text = "Báo Cáo";
-            // 
-            // btnBangDiem
-            // 
-            this.btnBangDiem.Name = "btnBangDiem";
-            this.btnBangDiem.Size = new System.Drawing.Size(182, 22);
-            this.btnBangDiem.Text = "Bảng điểm môn học";
-            // 
-            // btnDanhSachDangKy
-            // 
-            this.btnDanhSachDangKy.Name = "btnDanhSachDangKy";
-            this.btnDanhSachDangKy.Size = new System.Drawing.Size(182, 22);
-            this.btnDanhSachDangKy.Text = "Danh sách đăng ký";
-            // 
-            // btnKetQua
-            // 
-            this.btnKetQua.Name = "btnKetQua";
-            this.btnKetQua.Size = new System.Drawing.Size(182, 22);
-            this.btnKetQua.Text = "Kết quả thi";
+            this.lblFooter.Name = "lblFooter";
+            this.lblFooter.Size = new System.Drawing.Size(118, 17);
+            this.lblFooter.Text = "toolStripStatusLabel1";
             // 
             // frmMain
             // 

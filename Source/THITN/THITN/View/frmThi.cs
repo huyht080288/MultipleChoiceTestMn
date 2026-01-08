@@ -1,0 +1,332 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using THITN.Views;
+
+namespace THITN.View
+{
+    public partial class frmThi : Form
+    {
+        // Cấu trúc dữ liệu lưu câu hỏi và đáp án
+        public class CauHoi
+        {
+            public int ID { get; set; }
+            public int STT { get; set; }
+            public string NoiDung { get; set; }
+            public string A { get; set; }
+            public string B { get; set; }
+            public string C { get; set; }
+            public string D { get; set; }
+            public string DapAnDung { get; set; } // Đáp án đúng (A, B, C, D)
+            public string DapAnDaChon { get; set; } // Đáp án sinh viên chọn
+        }
+
+        // Biến toàn cục
+        private List<CauHoi> danhSachCauHoi;
+        private int currentCauHoiIndex = 0;
+        private int thoiGianConLai = 0; // Giây
+        private bool isBindingData = false; // Cờ chặn sự kiện khi đang load dữ liệu lên UI
+
+        public frmThi()
+        {
+            InitializeComponent();
+            DangKySuKien();
+        }
+
+        private void DangKySuKien()
+        {
+            // Đăng ký sự kiện Click cho các nút điều hướng
+            btnTruoc.Click += BtnTruoc_Click;
+            btnSau.Click += BtnSau_Click;
+            btnNopBai.Click += BtnNopBai_Click;
+            timerThi.Tick += TimerThi_Tick;
+
+            // Đăng ký sự kiện chọn đáp án
+            rdoA.CheckedChanged += Rdo_CheckedChanged;
+            rdoB.CheckedChanged += Rdo_CheckedChanged;
+            rdoC.CheckedChanged += Rdo_CheckedChanged;
+            rdoD.CheckedChanged += Rdo_CheckedChanged;
+        }
+
+        private void frmThi_Load(object sender, EventArgs e)
+        {
+            // 1. Tạo Mockup Data (50 câu, Trình độ A)
+            TaoDuLieuGia(50);
+
+            // 2. Thiết lập thời gian thi (90 phút)
+            thoiGianConLai = 90 * 60;
+            CapNhatHienThiDongHo();
+            timerThi.Start();
+
+            // 3. Tạo các nút câu hỏi trên thanh bên phải
+            KhoiTaoThanhDieuHuong();
+
+            // 4. Load câu hỏi đầu tiên
+            LoadCauHoiLenUI(0);
+        }
+
+        #region Xử lý Dữ liệu & UI
+
+        private void TaoDuLieuGia(int soCau)
+        {
+            danhSachCauHoi = new List<CauHoi>();
+            Random rnd = new Random();
+            string[] cacDapAn = { "A", "B", "C", "D" };
+
+            for (int i = 1; i <= soCau; i++)
+            {
+                danhSachCauHoi.Add(new CauHoi
+                {
+                    ID = i,
+                    STT = i,
+                    NoiDung = $"Đây là nội dung câu hỏi số {i}. Cấu trúc bảng BODE phân tán như thế nào trong SQL Server? (Dữ liệu giả lập để test giao diện)",
+                    A = $"Lựa chọn A cho câu {i}",
+                    B = $"Lựa chọn B cho câu {i}",
+                    C = $"Lựa chọn C cho câu {i}",
+                    D = $"Lựa chọn D cho câu {i}",
+                    DapAnDung = cacDapAn[rnd.Next(0, 4)], // Random đáp án đúng
+                    DapAnDaChon = "" // Mặc định chưa chọn
+                });
+            }
+
+            // Cập nhật thông tin Header
+            lblLop.Text = "Lớp: CNTT1 - K23DTCNN02";
+            lblMonThi.Text = "Môn thi: CƠ SỞ DỮ LIỆU PHÂN TÁN (MOCKUP)";
+            lblThongTinSV.Text = "Sinh viên: SV001 - Nguyễn Văn A";
+            
+        }
+
+        private void KhoiTaoThanhDieuHuong()
+        {
+            flowDanhSachCauHoi.Controls.Clear();
+
+            foreach (var cauHoi in danhSachCauHoi)
+            {
+                Button btn = new Button();
+                btn.Text = cauHoi.STT.ToString();
+                btn.Width = 45;
+                btn.Height = 40;
+                btn.Margin = new Padding(3);
+                btn.BackColor = Color.WhiteSmoke;
+                btn.Tag = cauHoi.STT - 1; // Lưu index vào Tag để truy xuất nhanh
+
+                // Sự kiện khi bấm vào nút số
+                btn.Click += (s, args) =>
+                {
+                    int index = (int)((Button)s).Tag;
+                    LoadCauHoiLenUI(index);
+                };
+
+                flowDanhSachCauHoi.Controls.Add(btn);
+            }
+        }
+
+        private void LoadCauHoiLenUI(int index)
+        {
+            if (index < 0 || index >= danhSachCauHoi.Count) return;
+
+            // Bật cờ binding để chặn sự kiện CheckedChanged chạy lung tung
+            isBindingData = true;
+            currentCauHoiIndex = index;
+
+            CauHoi cauHoi = danhSachCauHoi[index];
+
+            // Hiển thị nội dung
+            lblCauHoiSo.Text = $"Câu số {cauHoi.STT}:";
+            lblNoiDungCauHoi.Text = cauHoi.NoiDung;
+            rdoA.Text = cauHoi.A;
+            rdoB.Text = cauHoi.B;
+            rdoC.Text = cauHoi.C;
+            rdoD.Text = cauHoi.D;
+
+            // Reset Radio buttons
+            rdoA.Checked = false;
+            rdoB.Checked = false;
+            rdoC.Checked = false;
+            rdoD.Checked = false;
+
+            // Restore đáp án đã chọn (nếu có)
+            if (cauHoi.DapAnDaChon == "A") rdoA.Checked = true;
+            else if (cauHoi.DapAnDaChon == "B") rdoB.Checked = true;
+            else if (cauHoi.DapAnDaChon == "C") rdoC.Checked = true;
+            else if (cauHoi.DapAnDaChon == "D") rdoD.Checked = true;
+
+            // Cập nhật trạng thái nút điều hướng (Disable nếu ở đầu/cuối)
+            btnTruoc.Enabled = (index > 0);
+            btnSau.Enabled = (index < danhSachCauHoi.Count - 1);
+
+            // Highlight nút hiện tại trên thanh bên phải
+            CapNhatMauSacThanhDieuHuong();
+
+            isBindingData = false;
+        }
+
+        private void CapNhatMauSacThanhDieuHuong()
+        {
+            foreach (Control c in flowDanhSachCauHoi.Controls)
+            {
+                if (c is Button btn)
+                {
+                    int idx = (int)btn.Tag;
+
+                    // Logic màu sắc:
+                    // 1. Nếu đang chọn: Viền đậm hoặc màu cam (Ở đây dùng màu nền tạm)
+                    // 2. Nếu đã làm: Màu Xanh
+                    // 3. Chưa làm: Màu Trắng/Xám
+
+                    if (danhSachCauHoi[idx].DapAnDaChon != "")
+                    {
+                        btn.BackColor = Color.LightGreen; // Đã làm
+                    }
+                    else
+                    {
+                        btn.BackColor = Color.WhiteSmoke; // Chưa làm
+                    }
+
+                    if (idx == currentCauHoiIndex)
+                    {
+                        btn.FlatStyle = FlatStyle.Flat;
+                        btn.FlatAppearance.BorderColor = Color.Red;
+                        btn.FlatAppearance.BorderSize = 2;
+                    }
+                    else
+                    {
+                        btn.FlatStyle = FlatStyle.Standard;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Xử lý Sự kiện (Events)
+
+        private void BtnTruoc_Click(object sender, EventArgs e)
+        {
+            LoadCauHoiLenUI(currentCauHoiIndex - 1);
+        }
+
+        private void BtnSau_Click(object sender, EventArgs e)
+        {
+            LoadCauHoiLenUI(currentCauHoiIndex + 1);
+        }
+
+        private void Rdo_CheckedChanged(object sender, EventArgs e)
+        {
+            // Nếu đang load dữ liệu từ code thì không xử lý logic này
+            if (isBindingData) return;
+
+            RadioButton rdo = sender as RadioButton;
+            if (rdo == null || !rdo.Checked) return;
+
+            // Lưu đáp án vào list
+            string dapAnChon = rdo.Text; // Lưu ý: Ở đây rdo.Text đang là nội dung câu trả lời. 
+                                         // Cách tốt hơn là check rdo name hoặc tag.
+
+            if (rdo == rdoA) dapAnChon = "A";
+            if (rdo == rdoB) dapAnChon = "B";
+            if (rdo == rdoC) dapAnChon = "C";
+            if (rdo == rdoD) dapAnChon = "D";
+
+            danhSachCauHoi[currentCauHoiIndex].DapAnDaChon = dapAnChon;
+
+            // Cập nhật màu xanh cho nút bên phải ngay lập tức
+            CapNhatMauSacThanhDieuHuong();
+        }
+
+        private void TimerThi_Tick(object sender, EventArgs e)
+        {
+            thoiGianConLai--;
+            CapNhatHienThiDongHo();
+
+            if (thoiGianConLai <= 0)
+            {
+                timerThi.Stop();
+                MessageBox.Show("Đã hết thời gian làm bài!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                KetThucBaiThi();
+            }
+        }
+
+        private void CapNhatHienThiDongHo()
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(thoiGianConLai);
+            lblTime.Text = timeSpan.ToString(@"mm\:ss");
+
+            // Cảnh báo khi còn ít hơn 5 phút
+            if (thoiGianConLai < 300)
+            {
+                lblTime.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblTime.ForeColor = Color.Green;
+            }
+        }
+
+        private void BtnNopBai_Click(object sender, EventArgs e)
+        {
+            // Đếm số câu chưa làm
+            int soCauChuaLam = danhSachCauHoi.Count(x => x.DapAnDaChon == "");
+
+            string canhBao = "";
+            if (soCauChuaLam > 0)
+            {
+                canhBao = $"\nBạn còn {soCauChuaLam} câu chưa trả lời.";
+            }
+
+            DialogResult dr = MessageBox.Show($"Bạn có chắc chắn muốn nộp bài?{canhBao}",
+                                              "Xác nhận nộp bài",
+                                              MessageBoxButtons.YesNo,
+                                              MessageBoxIcon.Question);
+
+            if (dr == DialogResult.Yes)
+            {
+                timerThi.Stop();
+                KetThucBaiThi();
+            }
+        }
+
+        private void KetThucBaiThi()
+        {
+            // Tính điểm
+            int soCauDung = 0;
+            foreach (var cauHoi in danhSachCauHoi)
+            {
+                if (cauHoi.DapAnDaChon == cauHoi.DapAnDung)
+                {
+                    soCauDung++;
+                }
+            }
+
+            double diem = (double)soCauDung * 10 / danhSachCauHoi.Count;
+            // Làm tròn 1 chữ số thập phân
+            diem = Math.Round(diem, 1);
+
+            MessageBox.Show($"Kết quả thi: {diem} điểm.\nSố câu đúng: {soCauDung}/{danhSachCauHoi.Count}",
+                            "KẾT QUẢ",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+            // TODO: Gọi Stored Procedure để lưu điểm xuống Database tại đây
+            // GhiDiemVaoDatabase(diem);
+
+            // --- ĐOẠN CODE MỚI THÊM VÀO ---
+            frmKetQua f = new frmKetQua();
+            f.HoTen = lblThongTinSV.Text; // Lấy từ Label
+            f.MonThi = lblMonThi.Text;    // Lấy từ Label
+            f.Lop = lblLop.Text;
+            f.Diem = diem;
+            f.LanThi = "1";
+            f.KetQuaThi = this.danhSachCauHoi; // Truyền toàn bộ list câu hỏi sang
+
+            this.Hide(); // Ẩn form thi
+            f.ShowDialog(); // Hiện form kết quả
+            this.Close(); // Đóng form thi sau khi xem xong
+
+        }
+
+        #endregion
+    }
+}

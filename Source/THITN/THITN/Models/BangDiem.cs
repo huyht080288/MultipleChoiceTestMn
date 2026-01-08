@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace THITN.Models
 {
-    class Bangdiem
+    // 1. Model cho bảng BangDiem
+    public class BangDiem
     {
+        public string MASV { get; set; }        // nchar(8)
+        public string MAMH { get; set; }        // nchar(5)
+        public short LAN { get; set; }          // smallint
+        public DateTime NGAYTHI { get; set; }   // datetime
+        public double DIEM { get; set; }        // float
+        public Guid RowGuid { get; set; }       // uniqueidentifier
     }
 }

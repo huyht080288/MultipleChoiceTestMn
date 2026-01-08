@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace THITN.Models
 {
-    class Monhoc
+    public class MonHoc
     {
+        public string MAMH { get; set; }        // nchar(5)
+        public string TENMH { get; set; }       // nvarchar(50)
+        public Guid RowGuid { get; set; }
     }
 }

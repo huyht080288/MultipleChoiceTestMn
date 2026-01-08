@@ -14,8 +14,12 @@ namespace THITN.View
         public frmMain()
         {
             InitializeComponent();
+            // Ensure main form can host MDI children
+            this.IsMdiContainer = true;
+
             this.Load += FrmMain_Load;
             this.FormClosing += FrmMain_FormClosing;
+            this.btnThi.Click += btnThi_Click;
         }
         private void RefreshScreenStatus()
         {
@@ -101,24 +105,33 @@ namespace THITN.View
         }
 
 
-        private void mnLogout_Click(object sender, EventArgs e)
-        {
-            SystemInfo.Reset();
-            StartLoginForm();
-        }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
         }
 
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        private void Login_LoginSucceeded(object sender, EventArgs e)
+        {
+            RefreshScreenStatus();
+        }
+
+        #region DanhMuc
         private void mnLogin_Click(object sender, EventArgs e)
         {
             StartLoginForm();
         }
 
-        private void frmMain_Resize(object sender, EventArgs e)
+        private void mnLogout_Click(object sender, EventArgs e)
         {
-
+            SystemInfo.Reset();
+            StartLoginForm();
         }
 
         private void StartLoginForm()
@@ -136,14 +149,46 @@ namespace THITN.View
         }
 
 
-        private void Login_LoginSucceeded(object sender, EventArgs e)
-        {
-            RefreshScreenStatus();
-        }
-
         private void mnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
+        #endregion
+        #region ChucNang
+        private void btnThi_Click(object sender, EventArgs e)
+        {
+            StartChonMonThiForm();
+        }
+
+        private void StartChonMonThiForm()
+        {
+            // Ensure this form is an MDI container at runtime (harmless if already true)
+            this.IsMdiContainer = true;
+
+            // Look for existing child of type frmChonMonThi
+            foreach (var child in this.MdiChildren)
+            {
+                if (child is frmChonMonThi)
+                {
+                    // Restore/activate existing child
+                    child.WindowState = FormWindowState.Maximized;
+                    child.BringToFront();
+                    child.Activate();
+                    return;
+                }
+            }
+
+            // Not found: create new instance and show as MDI child
+            var chonMonThi = new frmChonMonThi
+            {
+                MdiParent = this,
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Maximized,
+                FormBorderStyle = FormBorderStyle.Sizable
+            };
+
+            chonMonThi.Show();
+        }
+        #endregion
     }
 }

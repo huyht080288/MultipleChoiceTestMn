@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace THITN.Models
 {
-    class Khoa
+    public class Khoa
     {
+        public string MAKH { get; set; }        // nchar(8)
+        public string TENKH { get; set; }       // nvarchar(50)
+        public string MACS { get; set; }        // nchar(3)
+        public Guid RowGuid { get; set; }
     }
 }

@@ -115,7 +115,7 @@
             this.txtLogin.Name = "txtLogin";
             this.txtLogin.Size = new System.Drawing.Size(256, 27);
             this.txtLogin.TabIndex = 2;
-            this.txtLogin.Text = "gv00";
+            this.txtLogin.Text = "sv01";
             // 
             // lblPassword
             // 
@@ -134,7 +134,7 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(256, 27);
             this.txtPassword.TabIndex = 3;
-            this.txtPassword.Text = "sa";
+            this.txtPassword.Text = "sv";
             this.txtPassword.UseSystemPasswordChar = true;
             // 
             // btnLogin
