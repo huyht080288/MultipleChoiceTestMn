@@ -1,0 +1,29 @@
+﻿IF OBJECT_ID('dbo.SP_GetThongTinGiaoVienTuLogin', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.SP_GetThongTinGiaoVienTuLogin;
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[SP_GetThongTinGiaoVienTuLogin] @TENLOGIN NVARCHAR (50)
+AS
+BEGIN
+DECLARE @TENUSER NVARCHAR(50), @UID INT
+SELECT @UID= UID, @TENUSER=NAME FROM sys.sysusers 
+     WHERE sid = SUSER_SID(@TENLOGIN)
+ 
+ SELECT MAGV = @TENUSER, 
+  HOTEN = (SELECT HO + ' '+ TEN FROM [dbo].GiaoVien  WHERE MAGV = @TENUSER ),
+   Role= NAME
+   FROM sys.sysusers 
+   WHERE UID = (SELECT GROUPUID 
+                 FROM SYS.SYSMEMBERS 
+                   WHERE MEMBERUID= @UID)
+END;
+
+GO
+
+

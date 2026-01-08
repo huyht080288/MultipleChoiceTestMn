@@ -1,0 +1,20 @@
+﻿IF OBJECT_ID('dbo.SP_GetThongTinSinhVien', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.SP_GetThongTinSinhVien;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+GO
+
+CREATE PROCEDURE dbo.SP_GetThongTinSinhVien
+	@MASV NCHAR(8),
+	@PASSWORD nvarchar(30)
+AS
+BEGIN
+    SELECT * 
+    FROM [dbo].[SinhVien]
+    WHERE
+        MASV = @MASV AND
+		PASSWORD = @PASSWORD
+END;
+GO

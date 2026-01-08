@@ -1,0 +1,17 @@
+﻿IF OBJECT_ID('dbo.SP_GetAllGiaoVienDangKy', 'P') IS NOT NULL
+    DROP PROCEDURE dbo.SP_GetAllGiaoVienDangKy;
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[SP_GetAllGiaoVienDangKy]
+AS
+BEGIN
+	SELECT *
+	FROM dbo.GiaoVien_DangKy
+END;
+GO

@@ -1,0 +1,394 @@
+USE [THITN]
+GO
+
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [THITN].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [THITN] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [THITN] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [THITN] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [THITN] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [THITN] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [THITN] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [THITN] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [THITN] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [THITN] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [THITN] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [THITN] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [THITN] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [THITN] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [THITN] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [THITN] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [THITN] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [THITN] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [THITN] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [THITN] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [THITN] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [THITN] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [THITN] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [THITN] SET RECOVERY FULL 
+GO
+ALTER DATABASE [THITN] SET  MULTI_USER 
+GO
+ALTER DATABASE [THITN] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [THITN] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [THITN] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [THITN] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [THITN] SET DELAYED_DURABILITY = DISABLED 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'THITN', N'ON'
+GO
+ALTER DATABASE [THITN] SET QUERY_STORE = OFF
+GO
+USE [THITN]
+GO
+/****** Object:  Table [dbo].[BangDiem]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BangDiem](
+	[MASV] [nchar](8) NOT NULL,
+	[MAMH] [nchar](5) NOT NULL,
+	[LAN] [smallint] NOT NULL,
+	[NGAYTHI] [datetime] NOT NULL,
+	[DIEM] [float] NOT NULL,
+ CONSTRAINT [PK_BangDiem] PRIMARY KEY CLUSTERED 
+(
+	[MASV] ASC,
+	[MAMH] ASC,
+	[LAN] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BoDe]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BoDe](
+	[CAUHOI] [int] IDENTITY(1,1) NOT NULL,
+	[MAMH] [nchar](5) NOT NULL,
+	[TRINHDO] [nchar](1) NOT NULL,
+	[NOIDUNG] [ntext] NOT NULL,
+	[A] [ntext] NOT NULL,
+	[B] [ntext] NOT NULL,
+	[C] [ntext] NULL,
+	[D] [ntext] NULL,
+	[DAPAN] [nchar](1) NULL,
+	[MAGV] [nchar](8) NOT NULL,
+ CONSTRAINT [PK_BODE] PRIMARY KEY CLUSTERED 
+(
+	[CAUHOI] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CoSo]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CoSo](
+	[MACS] [nchar](3) NOT NULL,
+	[TENCS] [nvarchar](50) NOT NULL,
+	[DIACHI] [nvarchar](100) NULL,
+ CONSTRAINT [PK_CoSo] PRIMARY KEY CLUSTERED 
+(
+	[MACS] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[GiaoVien]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[GiaoVien](
+	[MAGV] [nchar](8) NOT NULL,
+	[HO] [nvarchar](50) NOT NULL,
+	[TEN] [nvarchar](10) NOT NULL,
+	[HOCVI] [nvarchar](40) NOT NULL,
+	[MAKH] [nchar](8) NOT NULL,
+ CONSTRAINT [PK_GiaoVien] PRIMARY KEY CLUSTERED 
+(
+	[MAGV] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[GiaoVien_DangKy]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[GiaoVien_DangKy](
+	[MAGV] [nchar](8) NOT NULL,
+	[MALOP] [nchar](8) NOT NULL,
+	[MAMH] [nchar](5) NOT NULL,
+	[TRINHDO] [nchar](1) NOT NULL,
+	[NGAYTHI] [datetime] NOT NULL,
+	[LAN] [smallint] NOT NULL,
+	[SOCAUTHI] [smallint] NOT NULL,
+	[THOIGIAN] [smallint] NOT NULL,
+ CONSTRAINT [PK_GiaoVien_DangKy] PRIMARY KEY CLUSTERED 
+(
+	[MAGV] ASC,
+	[MALOP] ASC,
+	[MAMH] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Khoa]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Khoa](
+	[MAKH] [nchar](8) NOT NULL,
+	[TENKH] [nvarchar](50) NOT NULL,
+	[MACS] [nchar](3) NOT NULL,
+ CONSTRAINT [PK_Khoa] PRIMARY KEY CLUSTERED 
+(
+	[MAKH] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Lop]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Lop](
+	[MALOP] [nchar](8) NOT NULL,
+	[TENLOP] [nvarchar](40) NOT NULL,
+	[MAKH] [nchar](8) NOT NULL,
+ CONSTRAINT [PK_Lop] PRIMARY KEY CLUSTERED 
+(
+	[MALOP] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MonHoc]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MonHoc](
+	[MAMH] [nchar](5) NOT NULL,
+	[TENMH] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_MonHoc] PRIMARY KEY CLUSTERED 
+(
+	[MAMH] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SinhVien]    Script Date: 09/12/2025 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SinhVien](
+	[MASV] [nchar](8) NOT NULL,
+	[HO] [nvarchar](50) NOT NULL,
+	[TEN] [nvarchar](10) NOT NULL,
+	[NGAYSINH] [datetime] NULL,
+	[DIACHI] [nvarchar](100) NULL,
+	[MALOP] [nchar](8) NOT NULL,
+	[PASSWORD] [nvarchar](30) NOT NULL,
+ CONSTRAINT [PK_SinhVien] PRIMARY KEY CLUSTERED 
+(
+	[MASV] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[CoSo] ([MACS], [TENCS], [DIACHI]) VALUES (N'cs1', N'dongnai', N'dn01')
+GO
+INSERT [dbo].[CoSo] ([MACS], [TENCS], [DIACHI]) VALUES (N'cs2', N'tphcm', N'hcm01')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv01    ', N'Tran', N'Dai', N'1', N'khoa01  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv02    ', N'tran', N'nhi', N'1', N'khoa01  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv03    ', N'tran', N'tam', N'2', N'khoa02  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv04    ', N'tran', N'tu', N'2', N'khoa02  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv05    ', N'tran', N'ngu', N'3', N'khoa04  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv06    ', N'tran', N'luc', N'3', N'khoa04  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv07    ', N'tran', N'that', N'4', N'khoa03  ')
+GO
+INSERT [dbo].[GiaoVien] ([MAGV], [HO], [TEN], [HOCVI], [MAKH]) VALUES (N'gv08    ', N'tran', N'bat', N'4', N'khoa03  ')
+GO
+INSERT [dbo].[Khoa] ([MAKH], [TENKH], [MACS]) VALUES (N'khoa01  ', N'khoa01', N'cs1')
+GO
+INSERT [dbo].[Khoa] ([MAKH], [TENKH], [MACS]) VALUES (N'khoa02  ', N'khoa02', N'cs1')
+GO
+INSERT [dbo].[Khoa] ([MAKH], [TENKH], [MACS]) VALUES (N'khoa03  ', N'khoa03', N'cs2')
+GO
+INSERT [dbo].[Khoa] ([MAKH], [TENKH], [MACS]) VALUES (N'khoa04  ', N'khoa04', N'cs2')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop01   ', N'lop01', N'khoa01  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop02   ', N'lop02', N'khoa02  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop03   ', N'lop03', N'khoa03  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop04   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop05   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop06   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop07   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop08   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop09   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[Lop] ([MALOP], [TENLOP], [MAKH]) VALUES (N'lop10   ', N'lop04', N'khoa04  ')
+GO
+INSERT [dbo].[MonHoc] ([MAMH], [TENMH]) VALUES (N'mon01', N'mon01')
+GO
+INSERT [dbo].[MonHoc] ([MAMH], [TENMH]) VALUES (N'mon02', N'mon02')
+GO
+INSERT [dbo].[MonHoc] ([MAMH], [TENMH]) VALUES (N'mon03', N'mon03')
+GO
+INSERT [dbo].[MonHoc] ([MAMH], [TENMH]) VALUES (N'mon04', N'mon04')
+GO
+INSERT [dbo].[MonHoc] ([MAMH], [TENMH]) VALUES (N'mon05', N'mon05')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv01    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop02   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv02    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop02   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv03    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop03   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv04    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop04   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv05    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop05   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv06    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop06   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv07    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop07   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv08    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop08   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv09    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop09   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv10    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop10   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv11    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop01   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv12    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop02   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv13    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop03   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv14    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop04   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv15    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop05   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv16    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop06   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv17    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop07   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv18    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop08   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv19    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop09   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv20    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop10   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv21    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop01   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv22    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop02   ', N'sv')
+GO
+INSERT [dbo].[SinhVien] ([MASV], [HO], [TEN], [NGAYSINH], [DIACHI], [MALOP], [PASSWORD]) VALUES (N'sv23    ', N'sinh', N'vien', CAST(N'1988-02-08T00:00:00.000' AS DateTime), N'001', N'lop01   ', N'sv')
+GO
+ALTER TABLE [dbo].[BangDiem]  WITH CHECK ADD  CONSTRAINT [FK_BangDiem_MonHoc] FOREIGN KEY([MAMH])
+REFERENCES [dbo].[MonHoc] ([MAMH])
+GO
+ALTER TABLE [dbo].[BangDiem] CHECK CONSTRAINT [FK_BangDiem_MonHoc]
+GO
+ALTER TABLE [dbo].[BangDiem]  WITH CHECK ADD  CONSTRAINT [FK_BangDiem_SinhVien] FOREIGN KEY([MASV])
+REFERENCES [dbo].[SinhVien] ([MASV])
+GO
+ALTER TABLE [dbo].[BangDiem] CHECK CONSTRAINT [FK_BangDiem_SinhVien]
+GO
+ALTER TABLE [dbo].[BoDe]  WITH CHECK ADD  CONSTRAINT [FK_BoDe_GiaoVien] FOREIGN KEY([MAGV])
+REFERENCES [dbo].[GiaoVien] ([MAGV])
+GO
+ALTER TABLE [dbo].[BoDe] CHECK CONSTRAINT [FK_BoDe_GiaoVien]
+GO
+ALTER TABLE [dbo].[BoDe]  WITH CHECK ADD  CONSTRAINT [FK_BoDe_MonHoc] FOREIGN KEY([MAMH])
+REFERENCES [dbo].[MonHoc] ([MAMH])
+GO
+ALTER TABLE [dbo].[BoDe] CHECK CONSTRAINT [FK_BoDe_MonHoc]
+GO
+ALTER TABLE [dbo].[GiaoVien]  WITH CHECK ADD  CONSTRAINT [FK_GiaoVien_Khoa] FOREIGN KEY([MAKH])
+REFERENCES [dbo].[Khoa] ([MAKH])
+GO
+ALTER TABLE [dbo].[GiaoVien] CHECK CONSTRAINT [FK_GiaoVien_Khoa]
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy]  WITH CHECK ADD  CONSTRAINT [FK_GiaoVien_DangKy_GiaoVien] FOREIGN KEY([MAGV])
+REFERENCES [dbo].[GiaoVien] ([MAGV])
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy] CHECK CONSTRAINT [FK_GiaoVien_DangKy_GiaoVien]
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy]  WITH CHECK ADD  CONSTRAINT [FK_GiaoVien_DangKy_Lop] FOREIGN KEY([MALOP])
+REFERENCES [dbo].[Lop] ([MALOP])
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy] CHECK CONSTRAINT [FK_GiaoVien_DangKy_Lop]
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy]  WITH CHECK ADD  CONSTRAINT [FK_GiaoVien_DangKy_MonHoc] FOREIGN KEY([MAMH])
+REFERENCES [dbo].[MonHoc] ([MAMH])
+GO
+ALTER TABLE [dbo].[GiaoVien_DangKy] CHECK CONSTRAINT [FK_GiaoVien_DangKy_MonHoc]
+GO
+ALTER TABLE [dbo].[Khoa]  WITH CHECK ADD  CONSTRAINT [FK_Khoa_CoSo] FOREIGN KEY([MACS])
+REFERENCES [dbo].[CoSo] ([MACS])
+GO
+ALTER TABLE [dbo].[Khoa] CHECK CONSTRAINT [FK_Khoa_CoSo]
+GO
+ALTER TABLE [dbo].[Lop]  WITH CHECK ADD  CONSTRAINT [FK_Lop_Khoa] FOREIGN KEY([MAKH])
+REFERENCES [dbo].[Khoa] ([MAKH])
+GO
+ALTER TABLE [dbo].[Lop] CHECK CONSTRAINT [FK_Lop_Khoa]
+GO
+ALTER TABLE [dbo].[SinhVien]  WITH CHECK ADD  CONSTRAINT [FK_SinhVien_Lop] FOREIGN KEY([MALOP])
+REFERENCES [dbo].[Lop] ([MALOP])
+GO
+ALTER TABLE [dbo].[SinhVien] CHECK CONSTRAINT [FK_SinhVien_Lop]
+GO
+USE [master]
+GO
+ALTER DATABASE [THITN] SET  READ_WRITE 
+GO
