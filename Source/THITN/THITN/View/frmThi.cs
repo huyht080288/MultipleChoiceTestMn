@@ -3,28 +3,40 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using THITN.Controllers;
+using THITN.Helper;
+using THITN.Models;
 using THITN.Views;
 
 namespace THITN.View
 {
     public partial class frmThi : Form
     {
+        public string MAMH { get; set; }
+        public string MALOP { get; set; }
+        public string TENMH { get; set; }
+        public short LANTHI { get; set; }
+        public short THOIGIANTHI { get; set; } // Phút
+
+        public Lop objLop { get; set; }
+        public GiaoVien_DangKy objGiaoVien_DangKy { get; set; }
+
         // Cấu trúc dữ liệu lưu câu hỏi và đáp án
-        public class CauHoi
-        {
-            public int ID { get; set; }
-            public int STT { get; set; }
-            public string NoiDung { get; set; }
-            public string A { get; set; }
-            public string B { get; set; }
-            public string C { get; set; }
-            public string D { get; set; }
-            public string DapAnDung { get; set; } // Đáp án đúng (A, B, C, D)
-            public string DapAnDaChon { get; set; } // Đáp án sinh viên chọn
-        }
+        //public class CauHoi
+        //{
+        //    public int ID { get; set; }
+        //    public int STT { get; set; }
+        //    public string NoiDung { get; set; }
+        //    public string A { get; set; }
+        //    public string B { get; set; }
+        //    public string C { get; set; }
+        //    public string D { get; set; }
+        //    public string DapAnDung { get; set; } // Đáp án đúng (A, B, C, D)
+        //    public string DapAnDaChon { get; set; } // Đáp án sinh viên chọn
+        //}
 
         // Biến toàn cục
-        private List<CauHoi> danhSachCauHoi;
+        private List<BoDe> danhSachCauHoi;
         private int currentCauHoiIndex = 0;
         private int thoiGianConLai = 0; // Giây
         private bool isBindingData = false; // Cờ chặn sự kiện khi đang load dữ liệu lên UI
@@ -32,9 +44,44 @@ namespace THITN.View
         public frmThi()
         {
             InitializeComponent();
+            this.Load += new System.EventHandler(this.frmThi_Load);
+        }
+        private void frmThi_Load(object sender, EventArgs e)
+        {
+            LoadDangKy();
+
+            DisplayHeader();
             DangKySuKien();
+
+
+
+            // 1. Tạo Mockup Data (50 câu, Trình độ A)
+            TaoDuLieuGia(50);
+
+            // 2. Thiết lập thời gian thi (90 phút)
+            thoiGianConLai = THOIGIANTHI * 60;
+            CapNhatHienThiDongHo();
+            timerThi.Start();
+
+            // 3. Tạo các nút câu hỏi trên thanh bên phải
+            KhoiTaoThanhDieuHuong();
+
+            // 4. Load câu hỏi đầu tiên
+            LoadCauHoiLenUI(0);
         }
 
+
+        private void DisplayHeader()
+        {
+            lblLop.Text = $"Lớp: {objLop.MALOP} - {objLop.TENLOP}";
+            lblThongTinSV.Text = $"Sinh viên: {SystemInfo.CurrentSinhVien.MASV} - {SystemInfo.CurrentSinhVien.HO} {SystemInfo.CurrentSinhVien.TEN}";
+            lblMonThi.Text = $"Môn thi: {TENMH} (Lần {LANTHI})";
+        }
+        private void LoadDangKy()
+        {
+            objLop = new LopController().GetLop(MALOP);
+            objGiaoVien_DangKy = new GiaoVien_DangKyController().GetDangKy(MAMH, MALOP, LANTHI);
+        }
         private void DangKySuKien()
         {
             // Đăng ký sự kiện Click cho các nút điều hướng
@@ -50,52 +97,37 @@ namespace THITN.View
             rdoD.CheckedChanged += Rdo_CheckedChanged;
         }
 
-        private void frmThi_Load(object sender, EventArgs e)
-        {
-            // 1. Tạo Mockup Data (50 câu, Trình độ A)
-            TaoDuLieuGia(50);
 
-            // 2. Thiết lập thời gian thi (90 phút)
-            thoiGianConLai = 90 * 60;
-            CapNhatHienThiDongHo();
-            timerThi.Start();
-
-            // 3. Tạo các nút câu hỏi trên thanh bên phải
-            KhoiTaoThanhDieuHuong();
-
-            // 4. Load câu hỏi đầu tiên
-            LoadCauHoiLenUI(0);
-        }
 
         #region Xử lý Dữ liệu & UI
 
         private void TaoDuLieuGia(int soCau)
         {
-            danhSachCauHoi = new List<CauHoi>();
+            danhSachCauHoi = new List<BoDe>();
             Random rnd = new Random();
             string[] cacDapAn = { "A", "B", "C", "D" };
 
             for (int i = 1; i <= soCau; i++)
             {
-                danhSachCauHoi.Add(new CauHoi
+                danhSachCauHoi.Add(new BoDe
                 {
-                    ID = i,
+                    CAUHOI = i,
                     STT = i,
-                    NoiDung = $"Đây là nội dung câu hỏi số {i}. Cấu trúc bảng BODE phân tán như thế nào trong SQL Server? (Dữ liệu giả lập để test giao diện)",
+                    NOIDUNG = $"Đây là nội dung câu hỏi số {i}. Cấu trúc bảng BODE phân tán như thế nào trong SQL Server? (Dữ liệu giả lập để test giao diện)",
                     A = $"Lựa chọn A cho câu {i}",
                     B = $"Lựa chọn B cho câu {i}",
                     C = $"Lựa chọn C cho câu {i}",
                     D = $"Lựa chọn D cho câu {i}",
-                    DapAnDung = cacDapAn[rnd.Next(0, 4)], // Random đáp án đúng
+                    DAPAN = cacDapAn[rnd.Next(0, 4)], // Random đáp án đúng
                     DapAnDaChon = "" // Mặc định chưa chọn
                 });
             }
 
             // Cập nhật thông tin Header
-            lblLop.Text = "Lớp: CNTT1 - K23DTCNN02";
-            lblMonThi.Text = "Môn thi: CƠ SỞ DỮ LIỆU PHÂN TÁN (MOCKUP)";
-            lblThongTinSV.Text = "Sinh viên: SV001 - Nguyễn Văn A";
-            
+            //lblLop.Text = "Lớp: CNTT1 - K23DTCNN02";
+            //lblMonThi.Text = "Môn thi: CƠ SỞ DỮ LIỆU PHÂN TÁN (MOCKUP)";
+            //lblThongTinSV.Text = "Sinh viên: SV001 - Nguyễn Văn A";
+
         }
 
         private void KhoiTaoThanhDieuHuong()
@@ -131,11 +163,11 @@ namespace THITN.View
             isBindingData = true;
             currentCauHoiIndex = index;
 
-            CauHoi cauHoi = danhSachCauHoi[index];
+            BoDe cauHoi = danhSachCauHoi[index];
 
             // Hiển thị nội dung
             lblCauHoiSo.Text = $"Câu số {cauHoi.STT}:";
-            lblNoiDungCauHoi.Text = cauHoi.NoiDung;
+            lblNoiDungCauHoi.Text = cauHoi.NOIDUNG;
             rdoA.Text = cauHoi.A;
             rdoB.Text = cauHoi.B;
             rdoC.Text = cauHoi.C;
@@ -294,7 +326,7 @@ namespace THITN.View
             int soCauDung = 0;
             foreach (var cauHoi in danhSachCauHoi)
             {
-                if (cauHoi.DapAnDaChon == cauHoi.DapAnDung)
+                if (cauHoi.DapAnDaChon == cauHoi.DAPAN)
                 {
                     soCauDung++;
                 }
@@ -314,11 +346,10 @@ namespace THITN.View
 
             // --- ĐOẠN CODE MỚI THÊM VÀO ---
             frmKetQua f = new frmKetQua();
-            f.HoTen = lblThongTinSV.Text; // Lấy từ Label
-            f.MonThi = lblMonThi.Text;    // Lấy từ Label
             f.Lop = lblLop.Text;
+            f.MonThi = lblMonThi.Text;    // Lấy từ Label
             f.Diem = diem;
-            f.LanThi = "1";
+            f.LanThi = LANTHI.ToString();
             f.KetQuaThi = this.danhSachCauHoi; // Truyền toàn bộ list câu hỏi sang
 
             this.Hide(); // Ẩn form thi

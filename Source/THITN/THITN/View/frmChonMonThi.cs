@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
+using THITN.Controllers;
+using THITN.Helper;
+using THITN.Models;
 using THITN.View;
 
 namespace THITN.Views
 {
     public partial class frmChonMonThi : Form
     {
-        // Thông tin sinh viên (Giả sử nhận từ Form Đăng Nhập)
-        public string MaSV { get; set; } = "SV001";
-        public string MaLop { get; set; } = "D19CQCN01";
-        public string HoTen { get; set; } = "Nguyễn Văn A";
+        MonHocController objMonHocController = new MonHocController();
+        GiaoVien_DangKyController objGiaoVien_DangKyController = new GiaoVien_DangKyController();
 
-        // Biến lưu dữ liệu gốc để giả lập Database
-        private DataTable dtLichThiGoc;
+        List<GiaoVien_DangKy> lstDangKy = new List<GiaoVien_DangKy>();
+        List<MonHoc> lstMonHoc = new List<MonHoc>();
 
         public frmChonMonThi()
         {
@@ -22,55 +24,98 @@ namespace THITN.Views
 
             // Đăng ký sự kiện
             this.Load += FrmChonMonThi_Load;
-            btnTimKiem.Click += BtnTimKiem_Click;
-            btnBatDauThi.Click += BtnBatDauThi_Click;
-            btnThoat.Click += (s, e) => this.Close();
+        }
+        private void DisplayHeader()
+        {
+            string strSV = $"{SystemInfo.CurrentSinhVien.HO} {SystemInfo.CurrentSinhVien.TEN}";
+            lblSinhVien.Text = $"Sinh viên: {strSV} - Mã SV: {SystemInfo.CurrentSinhVien.MASV} - Lớp: {SystemInfo.CurrentSinhVien.MALOP}";
         }
 
         private void FrmChonMonThi_Load(object sender, EventArgs e)
         {
-            // 1. Hiển thị thông tin sinh viên
-            lblSinhVien.Text = $"Sinh viên: {HoTen} - Mã SV: {MaSV} - Lớp: {MaLop}";
-
-            // 2. Thiết lập mặc định cho các control lọc
-            cbbLanThi.SelectedIndex = 0; // Mặc định Lần 1
-            dtpNgayThi.Value = DateTime.Now; // Mặc định hôm nay
-
-            // 3. Load danh sách Môn học vào ComboBox
+            DisplayHeader();
             LoadDSMonHoc();
+            LoadDSDangKy();
 
-            // 4. Chuẩn bị dữ liệu giả (Mock Data) cho bảng lịch thi
-            KhoiTaoDuLieuGia();
+            cbbLanThi.SelectedIndex = 0;
+            dtpNgayThi.Value = DateTime.Now;
 
-            // Mặc định load lưới rỗng hoặc load toàn bộ tùy ý
-            // Ở đây ta để rỗng để bắt buộc sinh viên phải chọn và bấm Tìm kiếm
+            DisplayDSMonHoc();
+            DisplayDangKyOnGrid();
+
+            // Đăng ký sự kiện
+            this.cbbMonHoc.SelectedIndexChanged += new System.EventHandler(this.FilterValueChanged);
+            this.dtpNgayThi.ValueChanged += new System.EventHandler(this.FilterValueChanged);
+            this.cbbLanThi.SelectedIndexChanged += new System.EventHandler(this.FilterValueChanged);
+            btnBatDauThi.Click += BtnBatDauThi_Click;
+            btnThoat.Click += (a,b) => this.Close();
+        }
+
+        private void LoadDSDangKy()
+        {
+            lstDangKy = objGiaoVien_DangKyController.GetAllDangKy();
+
+            if (lstDangKy == null || lstDangKy.Count == 0)
+            {
+                MessageBox.Show("Không thể tải danh sách môn thi. Vui lòng liên hệ quản trị viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
+
+        private void DisplayDangKyOnGrid()
+        {
+            if (lstDangKy == null || lstDangKy.Count == 0)
+            {
+                dgvLichThi.DataSource = null;
+                lstDangKy = objGiaoVien_DangKyController.GetAllDangKy();
+                return;
+            }
+            if (lstDangKy == null || lstDangKy.Count == 0)
+            {
+                dgvLichThi.DataSource = null;
+                return;
+            }
+            string maMH = cbbMonHoc.SelectedValue.ToString();
+            DateTime ngayThi = dtpNgayThi.Value.Date;
+            int lanThi = int.Parse(cbbLanThi.SelectedItem.ToString());
+            List<GiaoVien_DangKy> lst = lstDangKy.Where(t => t.MAMH == maMH && t.NGAYTHI == ngayThi && t.LAN == lanThi).ToList();
+
+            var dtLichThiGoc = ToDatatable(lst);
+            dgvLichThi.DataSource = dtLichThiGoc;
+
+            FormatLuoi();
         }
 
         private void LoadDSMonHoc()
         {
-            // TODO: Query: SELECT MAMH, TENMH FROM MONHOC
-            // Ở đây tạo dữ liệu giả
-            DataTable dtMonHoc = new DataTable();
-            dtMonHoc.Columns.Add("MAMH");
-            dtMonHoc.Columns.Add("TENMH");
+            lstMonHoc = objMonHocController.GetAllMonHocThi();
 
-            dtMonHoc.Rows.Add("CSDLPT", "Cơ sở dữ liệu phân tán");
-            dtMonHoc.Rows.Add("MMT", "Mạng máy tính");
-            dtMonHoc.Rows.Add("CTDL", "Cấu trúc dữ liệu");
-            dtMonHoc.Rows.Add("LTM", "Lập trình mạng");
-
-            cbbMonHoc.DataSource = dtMonHoc;
+            if (lstMonHoc == null || lstMonHoc.Count == 0)
+            {
+                MessageBox.Show("Không thể tải danh sách môn học. Vui lòng liên hệ quản trị viên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            cbbMonHoc.DataSource = lstMonHoc;
             cbbMonHoc.DisplayMember = "TENMH";
             cbbMonHoc.ValueMember = "MAMH";
             cbbMonHoc.SelectedIndex = 0;
         }
 
-        private void KhoiTaoDuLieuGia()
+        private void DisplayDSMonHoc()
         {
-            // Giả lập dữ liệu trong bảng GIAOVIEN_DANGKY
-            dtLichThiGoc = new DataTable();
+            cbbMonHoc.DataSource = lstMonHoc;
+            cbbMonHoc.DisplayMember = "TENMH";
+            cbbMonHoc.ValueMember = "MAMH";
+            cbbMonHoc.SelectedIndex = 0;
+        }
+
+        private DataTable ToDatatable(List<GiaoVien_DangKy> lst)
+        {
+            // Build dtLichThiGoc from lstDangKy instead of hardcoded rows
+            var dtLichThiGoc = new DataTable();
             dtLichThiGoc.Columns.Add("MAMH", typeof(string));
             dtLichThiGoc.Columns.Add("TENMH", typeof(string));
+            dtLichThiGoc.Columns.Add("MALOP", typeof(string));
             dtLichThiGoc.Columns.Add("TENLOP", typeof(string));
             dtLichThiGoc.Columns.Add("NGAYTHI", typeof(DateTime));
             dtLichThiGoc.Columns.Add("LAN", typeof(int));
@@ -78,52 +123,32 @@ namespace THITN.Views
             dtLichThiGoc.Columns.Add("THOIGIAN", typeof(int));
             dtLichThiGoc.Columns.Add("TRINHDO", typeof(string));
 
-            // Thêm vài dòng dữ liệu mẫu
-            // Lưu ý: Ngày thi nên để là hôm nay để test cho dễ
-            dtLichThiGoc.Rows.Add("CSDLPT", "Cơ sở dữ liệu phân tán","CL1", DateTime.Now.Date, 1, 10, 15, "A");
-            dtLichThiGoc.Rows.Add("CSDLPT", "Cơ sở dữ liệu phân tán", "CL2", DateTime.Now.Date, 2, 20, 30, "B");
-
-            dtLichThiGoc.Rows.Add("MMT", "Mạng máy tính", "CL3", DateTime.Now.Date.AddDays(1), 1, 40, 45, "B");
-            dtLichThiGoc.Rows.Add("CTDL", "Cấu trúc dữ liệu", "CL4", DateTime.Now.Date.AddDays(-2), 1, 60, 90, "C");
-        }
-
-        private void BtnTimKiem_Click(object sender, EventArgs e)
-        {
-            // 1. Lấy thông tin từ bộ lọc
-            string maMH = cbbMonHoc.SelectedValue.ToString();
-            DateTime ngayThi = dtpNgayThi.Value.Date;
-            int lanThi = int.Parse(cbbLanThi.SelectedItem.ToString());
-
-            // 2. Tìm kiếm (Trong thực tế sẽ gọi SP_TIM_LICH_THI @MaMH, @Ngay, @Lan)
-            // Ở đây ta lọc trên DataTable giả
-            DataView dv = new DataView(dtLichThiGoc);
-
-            // Filter expression
-            // Lưu ý: DateTime trong Filter Expression của DataView cần định dạng cẩn thận hoặc lọc thủ công
-            // Cách đơn giản nhất cho Mockup là dùng LINQ hoặc Loop, nhưng ở đây ta dùng Select của DataTable
-
-            string filter = $"MAMH = '{maMH}' AND LAN = {lanThi}";
-            // Về ngày tháng, so sánh chính xác trong code sẽ dễ hơn string filter
-
-            DataTable dtKetQua = dtLichThiGoc.Clone(); // Copy cấu trúc
-            foreach (DataRow row in dtLichThiGoc.Rows)
+            if (lst == null || lst.Count == 0)
             {
-                if (row["MAMH"].ToString() == maMH &&
-                    (int)row["LAN"] == lanThi &&
-                    ((DateTime)row["NGAYTHI"]).Date == ngayThi)
+                // leave empty table (no hardcoded sample data)
+                return null;
+            }
+
+            foreach (var dk in lst)
+            {
+                string tenmh = string.Empty;
+                if (lstMonHoc != null)
                 {
-                    dtKetQua.ImportRow(row);
+                    var mh = lstMonHoc.FirstOrDefault(m => string.Equals(m.MAMH?.Trim(), dk.MAMH?.Trim(), StringComparison.OrdinalIgnoreCase));
+                    if (mh != null) tenmh = mh.TENMH;
                 }
-            }
+                LopController objLopController = new LopController();
+                string strMaLop = dk.MALOP;
+                var objLop = objLopController.GetLop(strMaLop);
+                DateTime ngaythi = dk.NGAYTHI.Date;
+                int lan = dk.LAN;
+                int socau = dk.SOCAUTHI;
+                int thoigian = dk.THOIGIAN;
+                string trinhdo = dk.TRINHDO;
 
-            // 3. Hiển thị kết quả lên lưới
-            dgvLichThi.DataSource = dtKetQua;
-            FormatLuoi();
-
-            if (dtKetQua.Rows.Count == 0)
-            {
-                MessageBox.Show("Không tìm thấy lịch thi phù hợp với thông tin bạn chọn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dtLichThiGoc.Rows.Add(dk.MAMH, tenmh, strMaLop, objLop.TENLOP, ngaythi, lan, socau, thoigian, trinhdo);
             }
+            return dtLichThiGoc;
         }
 
         private void FormatLuoi()
@@ -132,6 +157,7 @@ namespace THITN.Views
             {
                 dgvLichThi.Columns["MAMH"].HeaderText = "Mã MH";
                 dgvLichThi.Columns["TENMH"].HeaderText = "Tên Môn Học";
+                dgvLichThi.Columns["TENLOP"].HeaderText = "Tên Lớp";
                 dgvLichThi.Columns["NGAYTHI"].HeaderText = "Ngày Thi";
                 dgvLichThi.Columns["LAN"].HeaderText = "Lần Thi";
                 dgvLichThi.Columns["SOCAUTHI"].HeaderText = "Số Câu";
@@ -139,7 +165,10 @@ namespace THITN.Views
                 dgvLichThi.Columns["TRINHDO"].HeaderText = "Trình Độ";
 
                 // Format cột ngày
-                dgvLichThi.Columns["NGAYTHI"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                if (dgvLichThi.Columns["NGAYTHI"] != null)
+                    dgvLichThi.Columns["NGAYTHI"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                dgvLichThi.Columns["MALOP"].Visible = false;
+                dgvLichThi.Columns["MAMH"].Visible = false;
             }
         }
 
@@ -155,6 +184,8 @@ namespace THITN.Views
             DataGridViewRow row = dgvLichThi.SelectedRows[0];
             string maMH = row.Cells["MAMH"].Value.ToString();
             string tenMH = row.Cells["TENMH"].Value.ToString();
+            string maLop = row.Cells["MALOP"].Value.ToString();
+            string tenLop = row.Cells["TENLOP"].Value.ToString();
             int lan = int.Parse(row.Cells["LAN"].Value.ToString());
             int soCau = int.Parse(row.Cells["SOCAUTHI"].Value.ToString());
             int thoiGian = int.Parse(row.Cells["THOIGIAN"].Value.ToString());
@@ -170,21 +201,14 @@ namespace THITN.Views
                 return;
             }
 
-            // 2. Kiểm tra đã thi chưa (Gọi Database thật)
-            if (KiemTraDaThi(MaSV, maMH, lan))
+            frmThi f = new frmThi()
             {
-                MessageBox.Show("Bạn đã có điểm môn này lần thi này rồi!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // --- MỞ FORM THI ---
-            // Truyền tham số sang form Thi để form Thi biết cần load đề gì
-            // Bạn cần cập nhật constructor của frmThi hoặc tạo Property bên đó
-
-            frmThi f = new frmThi();
-            // Giả sử frmThi có phương thức nhận thông tin (bạn cần viết thêm bên frmThi)
-            // f.ThietLapThongTinBaiThi(maMH, tenMH, trinhDo, soCau, thoiGian, lan);
-
+                MALOP = maLop,
+                MAMH = maMH,
+                TENMH = tenMH,
+                LANTHI = (short)lan,
+                THOIGIANTHI = (short)thoiGian,
+            };
             this.Hide(); // Ẩn form chọn môn
             f.ShowDialog();
             this.Show(); // Hiện lại khi form thi đóng
@@ -193,11 +217,9 @@ namespace THITN.Views
             dgvLichThi.DataSource = null;
         }
 
-        private bool KiemTraDaThi(string masv, string mamh, int lan)
+        private void FilterValueChanged(object sender, EventArgs e)
         {
-            // TODO: SELECT COUNT(*) FROM BANGDIEM WHERE MASV=... AND MAMH=... AND LAN=...
-            // Trả về true nếu đã có điểm
-            return false;
+            DisplayDangKyOnGrid();
         }
     }
 }

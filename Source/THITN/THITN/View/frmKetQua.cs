@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using THITN.Helper;
+using THITN.Models;
 using THITN.View;
 
 namespace THITN.Views
@@ -10,11 +12,9 @@ namespace THITN.Views
     public partial class frmKetQua : Form
     {
         // Nhận dữ liệu từ form Thi
-        public List<frmThi.CauHoi> KetQuaThi { get; set; }
-        public string HoTen { get; set; }
+        public List<BoDe> KetQuaThi { get; set; }
         public string MonThi { get; set; }
         public double Diem { get; set; }
-        public string NgayThi { get; set; }
         public string LanThi { get; set; }
         public string Lop { get; set; }
 
@@ -32,12 +32,11 @@ namespace THITN.Views
         {
             // Hiển thị thông tin chung
             LblLop.Text = Lop;
-            lblHoTen.Text = HoTen;
+            lblHoTen.Text = $"Họ và tên: {SystemInfo.CurrentSinhVien.HO} {SystemInfo.CurrentSinhVien.TEN}";
             lblMonThi.Text = MonThi;
             lblDiemSo.Text = $"{Diem} ĐIỂM";
-            lblNgayThi.Text = $"Ngày thi: {NgayThi}";
+            lblNgayThi.Text = $"Ngày thi: {DateTime.Now.ToString("dd/MM/yyyy")}";
             lblLanThi.Text = $"Lần thi: {LanThi}";
-            lblNgayThi.Text = DateTime.Now.ToString("dd/mm/yyyy");
             // Hiển thị danh sách câu hỏi
             LoadDanhSachKetQua();
         }
@@ -60,13 +59,13 @@ namespace THITN.Views
                 // Format cột "Các lựa chọn" theo yêu cầu đề (A., B., C., D.)
                 string cacLuaChon = $"A. {cau.A}\nB. {cau.B}\nC. {cau.C}\nD. {cau.D}";
 
-                string ketQua = (cau.DapAnDaChon == cau.DapAnDung) ? "Đúng" : "Sai";
+                string ketQua = (cau.DapAnDaChon == cau.DAPAN) ? "Đúng" : "Sai";
 
                 dt.Rows.Add(
                     cau.STT,
-                    cau.NoiDung,
+                    cau.NOIDUNG,
                     cacLuaChon,
-                    cau.DapAnDung,
+                    cau.DAPAN,
                     cau.DapAnDaChon,
                     ketQua
                 );

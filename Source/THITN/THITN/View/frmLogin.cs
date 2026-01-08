@@ -18,14 +18,14 @@ namespace THITN.Views
     public partial class frmLogin : Form
     {
         // 1. Tạo một thể hiện (instance) của LoginController
-        private LoginController controller;
+        private LoginController objLoginController;
         public event EventHandler LoginSucceeded;
         public event EventHandler ExitRequested;
         public frmLogin()
         {
             InitializeComponent();
             // 2. Khởi tạo Controller
-            controller = new LoginController();
+            objLoginController = new LoginController();
         }
 
         private void frmLogin_Load(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace THITN.Views
             // --- Tải dữ liệu cho ComboBox Cơ sở ---
 
             // 3. View gọi Controller để lấy dữ liệu
-            List<Coso> coSoList = controller.LoadCoSoList();
+            List<Coso> coSoList = objLoginController.LoadCoSoList();
 
             if (coSoList == null)
             {
@@ -48,8 +48,9 @@ namespace THITN.Views
             cmbCoSo.DisplayMember = "TENCS";     // Hiển thị tên (ví dụ: "Cơ sở 1")
             cmbCoSo.ValueMember = "SERVER_NAME"; // Giá trị ẩn (ví dụ: "MAYCHU_CS1")
 
-            cmbCoSo.SelectedIndex = 1;
-            rbGiangVien.Checked = true;
+            cmbCoSo.SelectedIndex = 0;
+            //rbGiangVien.Checked = false;
+            rbSinhVien.Checked = true;
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -86,7 +87,7 @@ namespace THITN.Views
             SystemInfo.DB.ServerName = serverName;
 
 
-            controller.HandleLogin(serverName, login, password, isSinhVien);
+            objLoginController.HandleLogin(serverName, login, password, isSinhVien);
 
             if (SystemInfo.IsLoggedIn)
             {

@@ -19,5 +19,8 @@ namespace THITN.Models
         public string DAPAN { get; set; }       // nchar(1) (allow null)
         public string MAGV { get; set; }        // nchar(8)
         public Guid RowGuid { get; set; }
+
+        public int STT { get; set; }
+        public string DapAnDaChon { get; set; }
     }
 }
