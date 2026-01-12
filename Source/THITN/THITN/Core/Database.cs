@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using THITN.Helper;
 
 namespace THITN.Core
 {
@@ -52,7 +53,33 @@ namespace THITN.Core
                 return false; // Kết nối thất bại
             }
         }
+        public static bool Connect()
+        {
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                connection.Close(); // Đóng kết nối cũ nếu có
+            }
 
+            try
+            {
+                // Cấu hình chuỗi kết nối dựa trên thông tin đăng nhập
+                connectionString = $"Data Source={SystemInfo.DB.ServerName};Initial Catalog=THITN;User ID={SystemInfo.DB.LoginUser};Password={SystemInfo.DB.LoginPass}";
+                connection.ConnectionString = connectionString;
+
+                connection.Open();
+                return true; // Kết nối thành công
+            }
+            catch (SqlException ex)
+            {
+                //MessageBox.Show("Lỗi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false; // Kết nối thất bại
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Lỗi không xác định khi kết nối CSDL.\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false; // Kết nối thất bại
+            }
+        }
         /// <summary>
         /// Đóng kết nối CSDL
         /// </summary>
@@ -71,6 +98,11 @@ namespace THITN.Core
         /// </summary>
         public static SqlDataReader ExecuteReader(string commandText, CommandType type = CommandType.StoredProcedure, params SqlParameter[] parameters)
         {
+            if (connection == null || connection.State != ConnectionState.Open)
+            {
+                Connect();
+            }
+
             if (connection == null || connection.State != ConnectionState.Open)
             {
                 MessageBox.Show("Chưa kết nối CSDL!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -101,6 +133,10 @@ namespace THITN.Core
         /// </summary>
         public static int ExecuteNonQuery(string commandText, CommandType type = CommandType.StoredProcedure, params SqlParameter[] parameters)
         {
+            if (connection == null || connection.State != ConnectionState.Open)
+            {
+                Connect();
+            }
             if (connection == null || connection.State != ConnectionState.Open)
             {
                 MessageBox.Show("Chưa kết nối CSDL!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);

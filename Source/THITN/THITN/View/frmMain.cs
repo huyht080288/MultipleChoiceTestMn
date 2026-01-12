@@ -162,23 +162,22 @@ namespace THITN.View
 
         private void StartChonMonThiForm()
         {
-            // Ensure this form is an MDI container at runtime (harmless if already true)
+            // Đảm bảo form cha là MDI Container
             this.IsMdiContainer = true;
 
-            // Look for existing child of type frmChonMonThi
+            // 1. Tìm xem form con đã mở chưa
             foreach (var child in this.MdiChildren)
             {
                 if (child is frmChonMonThi)
                 {
-                    // Restore/activate existing child
-                    child.WindowState = FormWindowState.Maximized;
-                    child.BringToFront();
-                    child.Activate();
-                    return;
+                    // Nếu tìm thấy: Đóng form cũ lại
+                    child.Close();
+                    // child.Dispose(); // Close() tự động Dispose form con, nhưng gọi thêm cũng không sao
+                    break; // Thoát vòng lặp sau khi đóng
                 }
             }
 
-            // Not found: create new instance and show as MDI child
+            // 2. Luôn khởi tạo instance mới và hiển thị
             var chonMonThi = new frmChonMonThi
             {
                 MdiParent = this,
@@ -189,6 +188,7 @@ namespace THITN.View
 
             chonMonThi.Show();
         }
+
         #endregion
     }
 }

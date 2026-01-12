@@ -11,7 +11,7 @@ namespace THITN.DAO
 {
     public class GiaoVien_DangkyDAO
     {
-        public static List<GiaoVien_DangKy> GetAllDangKy()
+        public static List<GiaoVien_DangKy> GetAllGiaoVienDangKy()
         {
             var list = new List<GiaoVien_DangKy>();
 

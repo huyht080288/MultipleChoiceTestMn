@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BangDiemController.cs" />
     <Compile Include="Controllers\GiaoVienController.cs" />
     <Compile Include="Controllers\GiaoVien_DangKyController.cs" />
     <Compile Include="Controllers\LopController.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Core\Database.cs" />
     <Compile Include="Core\Session.cs" />
+    <Compile Include="DAO\BangDiemDAO.cs" />
     <Compile Include="DAO\CosoDAO.cs" />
     <Compile Include="DAO\KhoaDAO.cs" />
     <Compile Include="DAO\LopDAO.cs" />

@@ -11,10 +11,10 @@ namespace THITN.Controllers
         /// Gọi xuống tầng DAO để truy xuất dữ liệu
         /// </summary>
         /// <returns>List<MonHoc></returns>
-        public List<GiaoVien_DangKy> GetAllDangKy()
+        public List<GiaoVien_DangKy> GetAllGiaoVienDangKy()
         {
             // Gọi phương thức tĩnh từ DAO
-            return GiaoVien_DangkyDAO.GetAllDangKy();
+            return GiaoVien_DangkyDAO.GetAllGiaoVienDangKy();
         }
 
         public GiaoVien_DangKy GetDangKy(string strMaLop, string strMaMH, short sLan)

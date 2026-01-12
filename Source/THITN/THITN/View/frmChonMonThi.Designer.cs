@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbbMonHoc = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblLop = new System.Windows.Forms.Label();
             this.pnlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLichThi)).BeginInit();
             this.pnlBottom.SuspendLayout();
@@ -46,20 +47,21 @@
             // pnlTop
             // 
             this.pnlTop.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlTop.Controls.Add(this.lblLop);
             this.pnlTop.Controls.Add(this.lblSinhVien);
             this.pnlTop.Controls.Add(this.lblTitle);
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
             this.pnlTop.Margin = new System.Windows.Forms.Padding(2);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(778, 65);
+            this.pnlTop.Size = new System.Drawing.Size(778, 91);
             this.pnlTop.TabIndex = 0;
             // 
             // lblSinhVien
             // 
             this.lblSinhVien.AutoSize = true;
             this.lblSinhVien.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSinhVien.Location = new System.Drawing.Point(17, 38);
+            this.lblSinhVien.Location = new System.Drawing.Point(17, 62);
             this.lblSinhVien.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSinhVien.Name = "lblSinhVien";
             this.lblSinhVien.Size = new System.Drawing.Size(133, 19);
@@ -86,7 +88,7 @@
             this.dgvLichThi.BackgroundColor = System.Drawing.Color.White;
             this.dgvLichThi.ColumnHeadersHeight = 29;
             this.dgvLichThi.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLichThi.Location = new System.Drawing.Point(0, 134);
+            this.dgvLichThi.Location = new System.Drawing.Point(0, 160);
             this.dgvLichThi.Margin = new System.Windows.Forms.Padding(2);
             this.dgvLichThi.MultiSelect = false;
             this.dgvLichThi.Name = "dgvLichThi";
@@ -94,7 +96,7 @@
             this.dgvLichThi.RowHeadersVisible = false;
             this.dgvLichThi.RowTemplate.Height = 24;
             this.dgvLichThi.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLichThi.Size = new System.Drawing.Size(778, 231);
+            this.dgvLichThi.Size = new System.Drawing.Size(778, 281);
             this.dgvLichThi.TabIndex = 2;
             // 
             // pnlBottom
@@ -102,7 +104,7 @@
             this.pnlBottom.Controls.Add(this.btnThoat);
             this.pnlBottom.Controls.Add(this.btnBatDauThi);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 365);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 441);
             this.pnlBottom.Margin = new System.Windows.Forms.Padding(2);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(778, 57);
@@ -145,7 +147,7 @@
             this.grpBoLoc.Controls.Add(this.label1);
             this.grpBoLoc.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpBoLoc.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoLoc.Location = new System.Drawing.Point(0, 65);
+            this.grpBoLoc.Location = new System.Drawing.Point(0, 91);
             this.grpBoLoc.Margin = new System.Windows.Forms.Padding(2);
             this.grpBoLoc.Name = "grpBoLoc";
             this.grpBoLoc.Padding = new System.Windows.Forms.Padding(2);
@@ -217,11 +219,22 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Môn học:";
             // 
+            // lblLop
+            // 
+            this.lblLop.AutoSize = true;
+            this.lblLop.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLop.Location = new System.Drawing.Point(17, 43);
+            this.lblLop.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLop.Name = "lblLop";
+            this.lblLop.Size = new System.Drawing.Size(178, 19);
+            this.lblLop.TabIndex = 3;
+            this.lblLop.Text = "Lớp: CNTT1 - K23DTCNN02";
+            // 
             // frmChonMonThi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(778, 422);
+            this.ClientSize = new System.Drawing.Size(778, 498);
             this.Controls.Add(this.dgvLichThi);
             this.Controls.Add(this.grpBoLoc);
             this.Controls.Add(this.pnlBottom);
@@ -256,5 +269,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbbMonHoc;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblLop;
     }
 }

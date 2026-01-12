@@ -15,25 +15,11 @@ namespace THITN.View
         public string MAMH { get; set; }
         public string MALOP { get; set; }
         public string TENMH { get; set; }
-        public short LANTHI { get; set; }
+        public short LAN { get; set; }
         public short THOIGIANTHI { get; set; } // Phút
 
         public Lop objLop { get; set; }
         public GiaoVien_DangKy objGiaoVien_DangKy { get; set; }
-
-        // Cấu trúc dữ liệu lưu câu hỏi và đáp án
-        //public class CauHoi
-        //{
-        //    public int ID { get; set; }
-        //    public int STT { get; set; }
-        //    public string NoiDung { get; set; }
-        //    public string A { get; set; }
-        //    public string B { get; set; }
-        //    public string C { get; set; }
-        //    public string D { get; set; }
-        //    public string DapAnDung { get; set; } // Đáp án đúng (A, B, C, D)
-        //    public string DapAnDaChon { get; set; } // Đáp án sinh viên chọn
-        //}
 
         // Biến toàn cục
         private List<BoDe> danhSachCauHoi;
@@ -48,6 +34,7 @@ namespace THITN.View
         }
         private void frmThi_Load(object sender, EventArgs e)
         {
+            LoadLop();
             LoadDangKy();
 
             DisplayHeader();
@@ -73,14 +60,17 @@ namespace THITN.View
 
         private void DisplayHeader()
         {
-            lblLop.Text = $"Lớp: {objLop.MALOP} - {objLop.TENLOP}";
-            lblThongTinSV.Text = $"Sinh viên: {SystemInfo.CurrentSinhVien.MASV} - {SystemInfo.CurrentSinhVien.HO} {SystemInfo.CurrentSinhVien.TEN}";
-            lblMonThi.Text = $"Môn thi: {TENMH} (Lần {LANTHI})";
+            lblLop.Text = $"Lớp: {objLop.MALOP.Trim()} - {objLop.TENLOP.Trim()}";
+            lblThongTinSV.Text = $"Sinh viên: {SystemInfo.CurrentSinhVien.MASV.Trim()} - {SystemInfo.CurrentSinhVien.HO.Trim()} {SystemInfo.CurrentSinhVien.TEN.Trim()}";
+            lblMonThi.Text = $"Môn thi: {TENMH} (Lần {LAN})";
+        }
+        private void LoadLop()
+        {
+            objLop = new LopController().GetLop(MALOP);
         }
         private void LoadDangKy()
         {
-            objLop = new LopController().GetLop(MALOP);
-            objGiaoVien_DangKy = new GiaoVien_DangKyController().GetDangKy(MAMH, MALOP, LANTHI);
+            objGiaoVien_DangKy = new GiaoVien_DangKyController().GetDangKy(MAMH, MALOP, LAN);
         }
         private void DangKySuKien()
         {
@@ -336,26 +326,49 @@ namespace THITN.View
             // Làm tròn 1 chữ số thập phân
             diem = Math.Round(diem, 1);
 
-            MessageBox.Show($"Kết quả thi: {diem} điểm.\nSố câu đúng: {soCauDung}/{danhSachCauHoi.Count}",
-                            "KẾT QUẢ",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-
-            // TODO: Gọi Stored Procedure để lưu điểm xuống Database tại đây
-            // GhiDiemVaoDatabase(diem);
-
-            // --- ĐOẠN CODE MỚI THÊM VÀO ---
+            BangDiem objBangDiem = new BangDiem
+            {
+                MASV = SystemInfo.CurrentSinhVien.MASV,
+                MAMH = MAMH,
+                LAN = LAN,
+                NGAYTHI = DateTime.Now,
+                DIEM = diem
+            };
+            if(SystemInfo.Role == DatabaseRole.SINHVIEN)
+            {
+                // Lưu kết quả thi vào bảng BANGDIEM
+                bool luuThanhCong = LuuKetQuaThi(objBangDiem);
+                if (!luuThanhCong)
+                {
+                    return;
+                }
+            }
+ 
             frmKetQua f = new frmKetQua();
             f.Lop = lblLop.Text;
             f.MonThi = lblMonThi.Text;    // Lấy từ Label
             f.Diem = diem;
-            f.LanThi = LANTHI.ToString();
+            f.LanThi = LAN.ToString();
             f.KetQuaThi = this.danhSachCauHoi; // Truyền toàn bộ list câu hỏi sang
-
+            f.MaximizeBox = true;
+            f.WindowState = FormWindowState.Maximized;
             this.Hide(); // Ẩn form thi
             f.ShowDialog(); // Hiện form kết quả
             this.Close(); // Đóng form thi sau khi xem xong
 
+        }
+        private bool LuuKetQuaThi(BangDiem objBangDiem)
+        {
+            BangDiemController objBangDiemController = new BangDiemController();
+            if (!objBangDiemController.Insert(objBangDiem))
+            {
+                MessageBox.Show($"Lưu kết quả thất bại! Vui lòng kiểm tra lại kết nối",
+                "KẾT QUẢ",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+                return false;
+            }
+            return true;
         }
 
         #endregion
