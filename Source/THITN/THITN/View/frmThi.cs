@@ -70,7 +70,7 @@ namespace THITN.View
         }
         private void LoadDangKy()
         {
-            objGiaoVien_DangKy = new GiaoVien_DangKyController().GetDangKy(MAMH, MALOP, LAN);
+            objGiaoVien_DangKy = new GiaoVien_DangKyController().GetDangKy(MALOP, MAMH, LAN);
         }
         private void DangKySuKien()
         {
@@ -94,6 +94,9 @@ namespace THITN.View
         private void TaoDuLieuGia(int soCau)
         {
             danhSachCauHoi = new List<BoDe>();
+
+            danhSachCauHoi = new BoDeController().GetBoDe(MALOP, MAMH, objGiaoVien_DangKy.TRINHDO, soCau);
+
             Random rnd = new Random();
             string[] cacDapAn = { "A", "B", "C", "D" };
 
