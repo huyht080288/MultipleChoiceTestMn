@@ -150,11 +150,13 @@ BEGIN
     SELECT 
         ROW_NUMBER() OVER(ORDER BY NEWID()) AS STT, -- Đánh số lại từ 1..n
         CAUHOI,
+		MAMH,
+        TRINHDO,
         NOIDUNG,
         A, B, C, D,
         DAPAN,
-        TRINHDO
-        -- Không cần trả về MAGV, MACS cho sinh viên
+        MAGV,
+		MACS
     FROM #DE_THI_TEMP
     ORDER BY NEWID()
 

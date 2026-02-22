@@ -48,7 +48,7 @@ using THITN.View;
 
 namespace THITN
 {
-    static class Program
+    static class Programu
     {
         [STAThread]
         static void Main()

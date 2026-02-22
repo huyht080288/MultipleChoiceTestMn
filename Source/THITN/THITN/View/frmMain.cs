@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using THITN.Views;
 using THITN.Helper;
 using System.Linq.Expressions;
+using System.Diagnostics;
 
 namespace THITN.View
 {
@@ -20,6 +21,11 @@ namespace THITN.View
             this.Load += FrmMain_Load;
             this.FormClosing += FrmMain_FormClosing;
             this.btnThi.Click += btnThi_Click;
+            this.btnBangDiem.Click += new System.EventHandler(this.btnBangDiem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.helpsToolStripMenuItem.Click += new System.EventHandler(this.helpsToolStripMenuItem_Click);
+            this.btnNhapDe.Click += new System.EventHandler(this.btnNhapDe_Click);
+
         }
         private void RefreshScreenStatus()
         {
@@ -45,7 +51,6 @@ namespace THITN.View
                 btnChuanBiThi.Enabled = false;
                 btnThi.Enabled = false;
 
-                btnKetQua.Enabled = false;
                 btnBangDiem.Enabled = false;
                 btnDanhSachDangKy.Enabled = false;
 
@@ -58,7 +63,6 @@ namespace THITN.View
                         btnNhapGiaoVien.Enabled = true;
                         btnNhapDe.Enabled = true;
 
-                        btnKetQua.Enabled = true;
                         btnBangDiem.Enabled = true;
                         btnDanhSachDangKy.Enabled = true;
                         break;
@@ -70,7 +74,6 @@ namespace THITN.View
                         btnNhapDe.Enabled = true;
                         btnChuanBiThi.Enabled = true;
 
-                        btnKetQua.Enabled = true;
                         btnBangDiem.Enabled = true;
                         btnDanhSachDangKy.Enabled = true;
                         break;
@@ -81,7 +84,6 @@ namespace THITN.View
                         break;
                     case DatabaseRole.SINHVIEN:
                         btnThi.Enabled = true;
-                        btnKetQua.Enabled = true;
                         break;
                     default:
                         break;
@@ -95,6 +97,16 @@ namespace THITN.View
                 mnLogout.Enabled = false;
                 lblFooter.Text = "Chưa đăng nhập";
                 this.Text = "Ứng dụng Thi Trắc Nghiệm";
+                btnNhapMonHoc.Enabled = false;
+                btnNhapKhoaLop.Enabled = false;
+                btnNhapSinhVien.Enabled = false;
+                btnNhapGiaoVien.Enabled = false;
+                btnNhapDe.Enabled = false;
+                btnChuanBiThi.Enabled = false;
+                btnThi.Enabled = false;
+
+                btnBangDiem.Enabled = false;
+                btnDanhSachDangKy.Enabled = false;
             }
         }
 
@@ -190,5 +202,80 @@ namespace THITN.View
         }
 
         #endregion
+
+        private void btnBangDiem_Click(object sender, EventArgs e)
+        {
+            // Đảm bảo form cha là MDI Container
+            this.IsMdiContainer = true;
+
+            // 1. Tìm xem form con đã mở chưa
+            foreach (var child in this.MdiChildren)
+            {
+                if (child is frmDiemThi)
+                {
+                    // Nếu tìm thấy: Đóng form cũ lại
+                    child.Close();
+                    // child.Dispose(); // Close() tự động Dispose form con, nhưng gọi thêm cũng không sao
+                    break; // Thoát vòng lặp sau khi đóng
+                }
+            }
+
+            // 2. Luôn khởi tạo instance mới và hiển thị
+            var chonMonThi = new frmDiemThi
+            {
+                MdiParent = this,
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Maximized,
+                FormBorderStyle = FormBorderStyle.Sizable
+            };
+
+            chonMonThi.Show();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var chonMonThi = new frmAbout
+            {
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Normal,
+                FormBorderStyle = FormBorderStyle.FixedDialog
+            };
+
+            chonMonThi.ShowDialog();
+        }
+
+        private void helpsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"https://github.com/huyht080288/MultipleChoiceTestMn");
+        }
+
+        private void btnNhapDe_Click(object sender, EventArgs e)
+        {
+            // Đảm bảo form cha là MDI Container
+            this.IsMdiContainer = true;
+
+            // 1. Tìm xem form con đã mở chưa
+            foreach (var child in this.MdiChildren)
+            {
+                if (child is frmNhapDe)
+                {
+                    // Nếu tìm thấy: Đóng form cũ lại
+                    child.Close();
+                    // child.Dispose(); // Close() tự động Dispose form con, nhưng gọi thêm cũng không sao
+                    break; // Thoát vòng lặp sau khi đóng
+                }
+            }
+
+            // 2. Luôn khởi tạo instance mới và hiển thị
+            var chonMonThi = new frmNhapDe
+            {
+                MdiParent = this,
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Maximized,
+                FormBorderStyle = FormBorderStyle.Sizable
+            };
+
+            chonMonThi.Show();
+        }
     }
 }

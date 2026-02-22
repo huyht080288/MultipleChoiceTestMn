@@ -16,4 +16,18 @@ namespace THITN.Models
         public double DIEM { get; set; }        // float
         public Guid RowGuid { get; set; }       // uniqueidentifier
     }
+
+    public class ChiTietBangDiem
+    {
+        public string MASV { get; set; }
+        public string HO { get; set; }
+        public string TEN { get; set; }
+
+        // Sử dụng double? (nullable) vì sinh viên có thể vắng thi (không có điểm)
+        public double? DIEM { get; set; }
+
+        public string DIEMCHU { get; set; }
+        public DateTime? NGAYTHI { get; set; }
+    }
+
 }

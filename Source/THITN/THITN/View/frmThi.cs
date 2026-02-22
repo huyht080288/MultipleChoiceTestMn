@@ -93,9 +93,13 @@ namespace THITN.View
 
         private void TaoDuLieuGia(int soCau)
         {
-            danhSachCauHoi = new List<BoDe>();
-
             danhSachCauHoi = new BoDeController().GetBoDe(MALOP, MAMH, objGiaoVien_DangKy.TRINHDO, soCau);
+            if(danhSachCauHoi.Count == 0)
+            {
+                pnlHeader.Enabled = false;
+                this.Close();
+            }
+            return;
 
             Random rnd = new Random();
             string[] cacDapAn = { "A", "B", "C", "D" };
@@ -115,18 +119,12 @@ namespace THITN.View
                     DapAnDaChon = "" // Mặc định chưa chọn
                 });
             }
-
-            // Cập nhật thông tin Header
-            //lblLop.Text = "Lớp: CNTT1 - K23DTCNN02";
-            //lblMonThi.Text = "Môn thi: CƠ SỞ DỮ LIỆU PHÂN TÁN (MOCKUP)";
-            //lblThongTinSV.Text = "Sinh viên: SV001 - Nguyễn Văn A";
-
         }
 
         private void KhoiTaoThanhDieuHuong()
         {
             flowDanhSachCauHoi.Controls.Clear();
-
+            danhSachCauHoi = danhSachCauHoi.OrderBy(x => x.STT).ToList();
             foreach (var cauHoi in danhSachCauHoi)
             {
                 Button btn = new Button();

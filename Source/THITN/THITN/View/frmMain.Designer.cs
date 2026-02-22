@@ -42,7 +42,6 @@
             this.btnChuanBiThi = new System.Windows.Forms.ToolStripMenuItem();
             this.btnThi = new System.Windows.Forms.ToolStripMenuItem();
             this.báoCáoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnKetQua = new System.Windows.Forms.ToolStripMenuItem();
             this.btnBangDiem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDanhSachDangKy = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,18 +156,11 @@
             // báoCáoToolStripMenuItem
             // 
             this.báoCáoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnKetQua,
             this.btnBangDiem,
             this.btnDanhSachDangKy});
             this.báoCáoToolStripMenuItem.Name = "báoCáoToolStripMenuItem";
             this.báoCáoToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.báoCáoToolStripMenuItem.Text = "Báo Cáo";
-            // 
-            // btnKetQua
-            // 
-            this.btnKetQua.Name = "btnKetQua";
-            this.btnKetQua.Size = new System.Drawing.Size(182, 22);
-            this.btnKetQua.Text = "Kết quả thi";
             // 
             // btnBangDiem
             // 
@@ -262,7 +254,6 @@
         private System.Windows.Forms.ToolStripMenuItem btnNhapMonHoc;
         private System.Windows.Forms.ToolStripMenuItem btnNhapGiaoVien;
         private System.Windows.Forms.ToolStripMenuItem báoCáoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem btnKetQua;
         private System.Windows.Forms.ToolStripMenuItem btnBangDiem;
         private System.Windows.Forms.ToolStripMenuItem btnDanhSachDangKy;
     }

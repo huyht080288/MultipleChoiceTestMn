@@ -53,5 +53,53 @@ namespace THITN.DAO
             }
             return list;
         }
+
+        /// <summary>
+        /// Lấy chi tiết điểm thi của cả lớp (Dùng cho Báo Cáo)
+        /// </summary>
+        public static List<ChiTietBangDiem> GetBangDiemMonHoc(string maLop, string maMH, short lan)
+        {
+            List<ChiTietBangDiem> listKetQua = new List<ChiTietBangDiem>();
+
+            SqlParameter pMaLop = new SqlParameter("@MALOP", SqlDbType.NChar, 15) { Value = maLop };
+            SqlParameter pMaMH = new SqlParameter("@MAMH", SqlDbType.NChar, 5) { Value = maMH };
+            SqlParameter pLan = new SqlParameter("@LAN", SqlDbType.SmallInt) { Value = lan };
+
+            SqlDataReader reader = Database.ExecuteReader("SP_GetBangDiemTheoLopMonLan", CommandType.StoredProcedure, pMaLop, pMaMH, pLan);
+
+            if (reader != null)
+            {
+                try
+                {
+                    while (reader.Read())
+                    {
+                        ChiTietBangDiem item = new ChiTietBangDiem();
+                        item.MASV = reader["MASV"].ToString().Trim();
+                        item.HO = reader["HO"].ToString().Trim();
+                        item.TEN = reader["TEN"].ToString().Trim();
+                        item.NGAYTHI = reader["NGAYTHI"] != DBNull.Value ? Convert.ToDateTime(reader["NGAYTHI"]) : DateTime.MinValue;
+                        // Kiểm tra vắng thi (NULL)
+                        if (reader.IsDBNull(reader.GetOrdinal("DIEM")))
+                        {
+                            item.DIEM = null;
+                        }
+                        else
+                        {
+                            item.DIEM = Convert.ToDouble(reader["DIEM"]);
+                        }
+
+                        listKetQua.Add(item);
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+
+            return listKetQua;
+        }
+
+
     }
 }

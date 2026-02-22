@@ -16,5 +16,10 @@ namespace THITN.Controllers
             // Gọi phương thức tĩnh từ DAO
             return MonHocDAO.GetAllMonHocThi();
         }
+        public List<MonHoc> GetAllMonHoc()
+        {
+            // Gọi phương thức tĩnh từ DAO
+            return MonHocDAO.GetAllMonHoc();
+        }
     }
 }
