@@ -67,6 +67,20 @@ namespace THITN.View
         {
             LoadComboboxMonHoc();
             LoadDataBoDe();
+            if(SystemInfo.Role == DatabaseRole.TRUONG)
+            {
+                foreach (Control item in pnlTop.Controls)
+                {
+                    item.Enabled = false;    
+                }
+                btnThoat.Enabled = true;
+            }else
+            {
+                foreach (Control item in pnlTop.Controls)
+                {
+                    item.Enabled = true;
+                }
+            }
         }
 
         private void LoadComboboxMonHoc()

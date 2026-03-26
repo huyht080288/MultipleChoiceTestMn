@@ -104,8 +104,16 @@ namespace THITN.Controllers
             // 4. Thực thi Lưu
             try
             {
-                if (isAdding) return GiaoVien_DangkyDAO.Insert(gvdk);
-                else return GiaoVien_DangkyDAO.Update(gvdk);
+                if (isAdding)
+                {
+                    GiaoVien_DangkyDAO.Insert(gvdk);
+                    return true;
+                }
+                else
+                {
+                    GiaoVien_DangkyDAO.Update(gvdk);
+                    return true;
+                }
             }
             catch (Exception ex)
             {
