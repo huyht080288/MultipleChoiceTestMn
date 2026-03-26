@@ -79,21 +79,21 @@
             // mnLogin
             // 
             this.mnLogin.Name = "mnLogin";
-            this.mnLogin.Size = new System.Drawing.Size(132, 22);
+            this.mnLogin.Size = new System.Drawing.Size(180, 22);
             this.mnLogin.Text = "Đăng nhập";
             this.mnLogin.Click += new System.EventHandler(this.mnLogin_Click);
             // 
             // mnLogout
             // 
             this.mnLogout.Name = "mnLogout";
-            this.mnLogout.Size = new System.Drawing.Size(132, 22);
+            this.mnLogout.Size = new System.Drawing.Size(180, 22);
             this.mnLogout.Text = "Đăng xuất";
             this.mnLogout.Click += new System.EventHandler(this.mnLogout_Click);
             // 
             // mnExit
             // 
             this.mnExit.Name = "mnExit";
-            this.mnExit.Size = new System.Drawing.Size(132, 22);
+            this.mnExit.Size = new System.Drawing.Size(180, 22);
             this.mnExit.Text = "Thoát";
             this.mnExit.Click += new System.EventHandler(this.mnExit_Click);
             // 
@@ -116,6 +116,7 @@
             this.btnNhapMonHoc.Name = "btnNhapMonHoc";
             this.btnNhapMonHoc.Size = new System.Drawing.Size(180, 22);
             this.btnNhapMonHoc.Text = "Nhập môn học";
+            
             // 
             // btnNhapKhoaLop
             // 
@@ -146,7 +147,6 @@
             this.btnChuanBiThi.Name = "btnChuanBiThi";
             this.btnChuanBiThi.Size = new System.Drawing.Size(180, 22);
             this.btnChuanBiThi.Text = "Chuẩn bị thi";
-            
             // 
             // btnThi
             // 

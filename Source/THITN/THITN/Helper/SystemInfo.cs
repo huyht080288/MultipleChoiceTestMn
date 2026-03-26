@@ -21,9 +21,11 @@ namespace THITN.Helper
             DB.LoginPass = "sv";
             ScreenModeIs = ScreenMode.Logout;
             IsLoggedIn = false;
+            MaCoSo = string.Empty;
         }
         public static bool IsLoggedIn = false;
         public static DatabaseRole Role = DatabaseRole.None;
+        public static string MaCoSo = string.Empty;
         public static SinhVien CurrentSinhVien = null;
         public static GiaoVien CurrentGiaoVien = null;
         public static class DB

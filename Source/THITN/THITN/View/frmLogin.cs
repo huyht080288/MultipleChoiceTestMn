@@ -91,6 +91,12 @@ namespace THITN.Views
 
             if (SystemInfo.IsLoggedIn)
             {
+                if (SystemInfo.Role == DatabaseRole.COSO)
+                {
+                    var arr = serverName.Split('\\');
+                    SystemInfo.MaCoSo = arr[arr.Length - 1];
+                }
+
                 LoginSucceeded?.Invoke(this, EventArgs.Empty);
                 this.Close();   
             }

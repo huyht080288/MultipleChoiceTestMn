@@ -26,7 +26,8 @@ namespace THITN.View
             this.helpsToolStripMenuItem.Click += new System.EventHandler(this.helpsToolStripMenuItem_Click);
             this.btnNhapDe.Click += new System.EventHandler(this.btnNhapDe_Click);
             this.btnChuanBiThi.Click += new System.EventHandler(this.btnChuanBiThi_Click);
-
+            this.btnDanhSachDangKy.Click += new System.EventHandler(this.btnDanhSachDangKy_Click);
+            this.btnNhapMonHoc.Click += new System.EventHandler(this.btnNhapMonHoc_Click);
         }
         private void RefreshScreenStatus()
         {
@@ -144,6 +145,10 @@ namespace THITN.View
         private void mnLogout_Click(object sender, EventArgs e)
         {
             SystemInfo.Reset();
+            foreach (var child in this.MdiChildren)
+            {
+                child.Close();
+            }
             StartLoginForm();
         }
 
@@ -306,6 +311,40 @@ namespace THITN.View
             };
 
             frmChuanBiThi.Show();
+        }
+
+        private void btnDanhSachDangKy_Click(object sender, EventArgs e)
+        {
+            // Đảm bảo form cha là MDI Container
+            this.IsMdiContainer = true;
+
+            // 1. Tìm xem form con đã mở chưa
+            foreach (var child in this.MdiChildren)
+            {
+                if (child is frmDanhSachDangKy)
+                {
+                    // Nếu tìm thấy: Đóng form cũ lại
+                    child.Close();
+                    // child.Dispose(); // Close() tự động Dispose form con, nhưng gọi thêm cũng không sao
+                    break; // Thoát vòng lặp sau khi đóng
+                }
+            }
+
+            // 2. Luôn khởi tạo instance mới và hiển thị
+            var frmDanhSachDangKy = new frmDanhSachDangKy
+            {
+                MdiParent = this,
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Maximized,
+                FormBorderStyle = FormBorderStyle.Sizable
+            };
+
+            frmDanhSachDangKy.Show();
+        }
+
+        private void btnNhapMonHoc_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -53,6 +53,7 @@
     <Compile Include="Controllers\GiaoVien_DangKyController.cs" />
     <Compile Include="Controllers\LopController.cs" />
     <Compile Include="Controllers\MonHocController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SinhVienController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Core\Database.cs" />
@@ -65,10 +66,12 @@
     <Compile Include="DAO\GiaoVien_DangkyDAO.cs" />
     <Compile Include="DAO\MonhocDAO.cs" />
     <Compile Include="DAO\GiaoVienDAO.cs" />
+    <Compile Include="DAO\ReportDAO.cs" />
     <Compile Include="DAO\SinhvienDAO.cs" />
     <Compile Include="Helper\DataTableExtensions.cs" />
     <Compile Include="Helper\Utils.cs" />
     <Compile Include="Helper\SystemInfo.cs" />
+    <Compile Include="Models\ReportDanhSachDangKy.cs" />
     <Compile Include="Models\BangDiem.cs" />
     <Compile Include="Models\Bode.cs" />
     <Compile Include="Models\Coso.cs" />
@@ -97,6 +100,12 @@
     </Compile>
     <Compile Include="View\frmChuanBiThi.Designer.cs">
       <DependentUpon>frmChuanBiThi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\frmDanhSachDangKy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\frmDanhSachDangKy.Designer.cs">
+      <DependentUpon>frmDanhSachDangKy.cs</DependentUpon>
     </Compile>
     <Compile Include="View\frmDiemThi.cs">
       <SubType>Form</SubType>
