@@ -25,6 +25,7 @@ namespace THITN.View
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             this.helpsToolStripMenuItem.Click += new System.EventHandler(this.helpsToolStripMenuItem_Click);
             this.btnNhapDe.Click += new System.EventHandler(this.btnNhapDe_Click);
+            this.btnChuanBiThi.Click += new System.EventHandler(this.btnChuanBiThi_Click);
 
         }
         private void RefreshScreenStatus()
@@ -39,7 +40,7 @@ namespace THITN.View
                 }
                 else
                 {
-                    lblFooter.Text = "Đăng nhập với tư cách Giáo Viên: " + SystemInfo.CurrentGiaoVien.TEN + " - Mã SV: " + SystemInfo.CurrentGiaoVien.MAGV;
+                    lblFooter.Text = "Đăng nhập với tư cách Giáo Viên: " + SystemInfo.CurrentGiaoVien.TEN + " - Mã GV: " + SystemInfo.CurrentGiaoVien.MAGV;
                 }
 
 
@@ -276,6 +277,35 @@ namespace THITN.View
             };
 
             chonMonThi.Show();
+        }
+
+        private void btnChuanBiThi_Click(object sender, EventArgs e)
+        {
+            // Đảm bảo form cha là MDI Container
+            this.IsMdiContainer = true;
+
+            // 1. Tìm xem form con đã mở chưa
+            foreach (var child in this.MdiChildren)
+            {
+                if (child is frmChuanBiThi)
+                {
+                    // Nếu tìm thấy: Đóng form cũ lại
+                    child.Close();
+                    // child.Dispose(); // Close() tự động Dispose form con, nhưng gọi thêm cũng không sao
+                    break; // Thoát vòng lặp sau khi đóng
+                }
+            }
+
+            // 2. Luôn khởi tạo instance mới và hiển thị
+            var frmChuanBiThi = new frmChuanBiThi
+            {
+                MdiParent = this,
+                StartPosition = FormStartPosition.CenterParent,
+                WindowState = FormWindowState.Maximized,
+                FormBorderStyle = FormBorderStyle.Sizable
+            };
+
+            frmChuanBiThi.Show();
         }
     }
 }

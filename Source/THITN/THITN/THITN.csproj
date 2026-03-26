@@ -92,6 +92,12 @@
     <Compile Include="View\frmChonMonThi.Designer.cs">
       <DependentUpon>frmChonMonThi.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\frmChuanBiThi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\frmChuanBiThi.Designer.cs">
+      <DependentUpon>frmChuanBiThi.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\frmDiemThi.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\frmChonMonThi.resx">
       <DependentUpon>frmChonMonThi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\frmChuanBiThi.resx">
+      <DependentUpon>frmChuanBiThi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\frmDiemThi.resx">
       <DependentUpon>frmDiemThi.cs</DependentUpon>

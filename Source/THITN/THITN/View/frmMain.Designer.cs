@@ -146,6 +146,7 @@
             this.btnChuanBiThi.Name = "btnChuanBiThi";
             this.btnChuanBiThi.Size = new System.Drawing.Size(180, 22);
             this.btnChuanBiThi.Text = "Chuẩn bị thi";
+            
             // 
             // btnThi
             // 
